@@ -15,6 +15,13 @@
       "when": 1794336913608,
       "tag": "0001_provider_contact_info",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794344534249,
+      "tag": "0002_admin_invite_gabi",
+      "breakpoints": true
     }
   ]
 }

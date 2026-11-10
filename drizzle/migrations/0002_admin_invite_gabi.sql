@@ -1,0 +1,1 @@
+insert into public.admin_invites (email, neighborhood_id) select 'gabybs@gmail.com', '11111111-1111-1111-1111-111111111111' where not exists (select 1 from public.admin_invites where lower(email)='gabybs@gmail.com');
