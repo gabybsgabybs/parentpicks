@@ -262,8 +262,11 @@ export type Database = {
       }
       providers: {
         Row: {
+          address: string | null
           aliases: string[]
+          booking_url: string | null
           category: string
+          contact_checked_at: string | null
           created_at: string
           first_mention: string | null
           id: string
@@ -274,15 +277,20 @@ export type Database = {
           negative: number
           neighborhood_id: string
           parent_count: number
+          phone: string | null
           positive: number
           self_promo_flag: boolean
           status: string
           summary: string
           updated_at: string
+          website: string | null
         }
         Insert: {
+          address?: string | null
           aliases?: string[]
+          booking_url?: string | null
           category?: string
+          contact_checked_at?: string | null
           created_at?: string
           first_mention?: string | null
           id?: string
@@ -293,15 +301,20 @@ export type Database = {
           negative?: number
           neighborhood_id: string
           parent_count?: number
+          phone?: string | null
           positive?: number
           self_promo_flag?: boolean
           status?: string
           summary?: string
           updated_at?: string
+          website?: string | null
         }
         Update: {
+          address?: string | null
           aliases?: string[]
+          booking_url?: string | null
           category?: string
+          contact_checked_at?: string | null
           created_at?: string
           first_mention?: string | null
           id?: string
@@ -312,11 +325,13 @@ export type Database = {
           negative?: number
           neighborhood_id?: string
           parent_count?: number
+          phone?: string | null
           positive?: number
           self_promo_flag?: boolean
           status?: string
           summary?: string
           updated_at?: string
+          website?: string | null
         }
         Relationships: [
           {

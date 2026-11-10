@@ -1,0 +1,1 @@
+ALTER TABLE public.providers ADD COLUMN website text, ADD COLUMN phone text, ADD COLUMN address text, ADD COLUMN booking_url text, ADD COLUMN contact_checked_at timestamptz;
