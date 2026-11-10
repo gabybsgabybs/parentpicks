@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { CATEGORIES } from "./categories";
+import { CATEGORIES, cleanUrl, websiteOnly } from "./categories";
 
 const PRIVACY = `Privacy rules: never include any person's name, initials, phone number, children's names, ages tied to a child, health conditions or diagnoses. Describe the provider's service only, not the family's situation. Paraphrase; never quote. Keep negative points factual and calm.`;
 
@@ -91,7 +91,7 @@ export const finalizeUpload = createServerFn({ method: "POST" })
     const names = [...new Set((pending ?? []).map((m) => m.raw_name))];
     if (!names.length) {
       await db.from("uploads").update({ status: "done", recommendations_found: 0 }).eq("id", data.uploadId);
-      return { recommendations: 0, mentions: 0 };
+      return { recommendations: 0, mentions: 0, providerIds: [] as string[] };
     }
     const nameInfo = names.map((n) => {
       const ms = (pending ?? []).filter((m) => m.raw_name === n);
@@ -142,7 +142,7 @@ uncertain_with: if a group MIGHT be the same as another group's canonical_name o
     await writeSummaries(db, [...touched]);
     const { count } = await db.from("mentions").select("id", { count: "exact", head: true }).eq("upload_id", data.uploadId);
     await db.from("uploads").update({ status: "done", recommendations_found: touched.size }).eq("id", data.uploadId);
-    return { recommendations: touched.size, mentions: count ?? 0 };
+    return { recommendations: touched.size, mentions: count ?? 0, providerIds: [...touched] };
   });
 
 async function writeSummaries(db: any, ids: string[]) {
@@ -198,4 +198,47 @@ export const splitProvider = createServerFn({ method: "POST" })
     for (const id of [p.id, created.id]) await db.rpc("recompute_provider", { _p: id });
     await writeSummaries(db, [p.id, created.id]);
     return { newId: created.id };
+  });
+
+/** Looks up public business contact info on the web. Never touches chat content or parent details. */
+export const lookupContacts = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { neighborhoodId: string; providerIds: string[] }) =>
+    z.object({ neighborhoodId: z.string().uuid(), providerIds: z.array(z.string().uuid()).min(1).max(10) }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase, data.neighborhoodId);
+    const { aiJson } = await import("./ai.server");
+    const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
+    const { data: nbRow } = await db.from("neighborhoods").select("name").eq("id", data.neighborhoodId).single();
+    const { data: provs } = await db.from("providers").select("id, name, aliases, category, location")
+      .eq("neighborhood_id", data.neighborhoodId).in("id", data.providerIds);
+    let found = 0;
+    for (const p of provs ?? []) {
+      const webOnly = websiteOnly(p.category);
+      try {
+        const out = await aiJson<{ website: string | null; phone: string | null; address: string | null; booking_url: string | null }>(
+          `Search the web for the official public contact details of a business recommended in a parents' group.
+Neighborhood group: "${nbRow?.name ?? ""}"${p.location ? `, near ${p.location}` : ""}. Prefer a match in that area.
+${webOnly ? "This is a brand or shop: return only its official website (online store). Set phone, address and booking_url to null." : "Return the official website, main public business phone number, street address, and an online booking/appointment URL if one exists."}
+Only return details you found on the business's own site or a reputable listing. If you are not confident it's the same business, return null for everything. Never invent values. Phone in local readable format.`,
+          `Business: ${p.name}${p.aliases.length ? ` (also called: ${p.aliases.join(", ")})` : ""}\nCategory: ${p.category}`,
+          "contact",
+          { type: "object", additionalProperties: false, required: ["website", "phone", "address", "booking_url"], properties: {
+            website: { type: ["string", "null"] }, phone: { type: ["string", "null"] }, address: { type: ["string", "null"] }, booking_url: { type: ["string", "null"] } } },
+          { webSearch: true },
+        );
+        const row = {
+          website: cleanUrl(out.website),
+          phone: webOnly ? null : out.phone?.trim().slice(0, 40) || null,
+          address: webOnly ? null : out.address?.trim().slice(0, 300) || null,
+          booking_url: webOnly ? null : cleanUrl(out.booking_url),
+          contact_checked_at: new Date().toISOString(),
+        };
+        if (row.website || row.phone) found++;
+        await db.from("providers").update(row).eq("id", p.id);
+      } catch (e) {
+        console.error("contact lookup failed", p.id, e);
+      }
+    }
+    return { found };
   });

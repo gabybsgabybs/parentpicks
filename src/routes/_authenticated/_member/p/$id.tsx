@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { CATEGORY_LABEL, isOlder, yearRange, type Category } from "@/lib/categories";
 import type { Provider } from "@/lib/board";
 import { SentimentBar } from "@/components/SentimentBar";
+import { ContactLinks, hasContact } from "@/components/ContactLinks";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -44,6 +45,13 @@ function Detail() {
         <p className="mt-2"><b>{p.parent_count} parents</b> mentioned this · {yearRange(p.first_mention, p.last_mention)}</p>
         <SentimentBar p={p} className="mt-3" />
         <p className="mt-4 text-lg leading-relaxed">{p.summary}</p>
+        {hasContact(p) && (
+          <div className="mt-5">
+            <ContactLinks p={p} />
+            {p.address && <p className="mt-2 text-sm text-foreground/70">{p.address}</p>}
+            <p className="mt-2 text-xs text-foreground/60">Contact details found online by AI. Please double-check before booking.</p>
+          </div>
+        )}
         {p.aliases.length > 0 && <p className="mt-4 text-sm"><span className="font-semibold">Also called:</span> {p.aliases.join(", ")}</p>}
       </article>
       <p className="mt-3 text-xs text-muted-foreground">Recommendations as shared by parents in the group. Summaries are written by AI and may contain mistakes. Not verified.</p>

@@ -6,6 +6,7 @@ export type Provider = {
   id: string; neighborhood_id: string; name: string; aliases: string[]; category: string; summary: string; location: string | null;
   status: string; self_promo_flag: boolean; parent_count: number; positive: number; negative: number; mixed: number;
   first_mention: string | null; last_mention: string | null;
+  website: string | null; phone: string | null; address: string | null; booking_url: string | null; contact_checked_at: string | null;
 };
 
 export const boardQuery = (nb: string) => queryOptions({

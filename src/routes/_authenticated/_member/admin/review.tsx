@@ -12,9 +12,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CATEGORIES, CATEGORY_LABEL, MIN_PARENTS, yearRange } from "@/lib/categories";
+import { CATEGORIES, CATEGORY_LABEL, MIN_PARENTS, cleanUrl, yearRange } from "@/lib/categories";
 import type { Provider } from "@/lib/board";
-import { mergeProviders, splitProvider } from "@/lib/pipeline.functions";
+import { lookupContacts, mergeProviders, splitProvider } from "@/lib/pipeline.functions";
+import { websiteOnly } from "@/lib/categories";
 
 const reviewQuery = (nb: string) => queryOptions({
   queryKey: ["review", nb],
@@ -135,10 +136,20 @@ function EditCard({ p, all, onChange, onMerge }: { p: Provider; all: Provider[];
   const [category, setCategory] = useState(p.category);
   const [summary, setSummary] = useState(p.summary);
   const [mergeInto, setMergeInto] = useState("");
+  const [website, setWebsite] = useState(p.website ?? "");
+  const [phone, setPhone] = useState(p.phone ?? "");
+  const [address, setAddress] = useState(p.address ?? "");
+  const [booking, setBooking] = useState(p.booking_url ?? "");
+  const [looking, setLooking] = useState(false);
   const split = useServerFn(splitProvider);
-  const dirty = name !== p.name || category !== p.category || summary !== p.summary;
+  const lookup = useServerFn(lookupContacts);
+  const webOnly = websiteOnly(category);
+  const contactDirty = website !== (p.website ?? "") || phone !== (p.phone ?? "") || address !== (p.address ?? "") || booking !== (p.booking_url ?? "");
+  const dirty = name !== p.name || category !== p.category || summary !== p.summary || contactDirty;
   async function save(extra: Partial<Provider> = {}) {
-    const { error } = await supabase.from("providers").update({ name, category: category as never, summary, ...extra } as never).eq("id", p.id);
+    const { error } = await supabase.from("providers").update({ name, category: category as never, summary,
+      website: cleanUrl(website), phone: webOnly ? null : phone.trim() || null, address: webOnly ? null : address.trim() || null,
+      booking_url: webOnly ? null : cleanUrl(booking), ...extra } as never).eq("id", p.id);
     if (error) { toast.error(error.message); return; }
     toast.success(extra.status ? `Moved to ${STATUS_LABEL[extra.status as Status]}` : "Saved"); onChange();
   }
@@ -158,6 +169,25 @@ function EditCard({ p, all, onChange, onMerge }: { p: Provider; all: Provider[];
       </div>
       <SentimentBar p={p} className="mt-2 max-w-sm" />
       <Textarea value={summary} onChange={(e) => setSummary(e.target.value)} rows={3} className="mt-3 text-base" aria-label="Summary" />
+      <div className="mt-3 rounded-xl bg-secondary/50 p-3">
+        <div className="mb-2 flex items-center gap-2 text-sm">
+          <span className="font-semibold">Contact info</span>
+          <span className="text-muted-foreground">{p.contact_checked_at ? "found online by AI — please check" : "not looked up yet"}</span>
+          <Button size="sm" variant="outline" className="ml-auto" disabled={looking} onClick={async () => {
+            setLooking(true);
+            try { await lookup({ data: { neighborhoodId: p.neighborhood_id, providerIds: [p.id] } }); toast.success("Contact info updated"); onChange(); }
+            catch (e) { toast.error((e as Error).message); } finally { setLooking(false); }
+          }}>{looking ? "Searching…" : p.contact_checked_at ? "Search again" : "Find contact info"}</Button>
+        </div>
+        <div className="grid gap-2 md:grid-cols-2">
+          <Input value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="Website" aria-label="Website" />
+          {!webOnly && <>
+            <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone" aria-label="Phone" />
+            <Input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Address" aria-label="Address" />
+            <Input value={booking} onChange={(e) => setBooking(e.target.value)} placeholder="Booking link" aria-label="Booking link" />
+          </>}
+        </div>
+      </div>
       {p.aliases.length > 0 && (
         <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
           <span className="font-semibold">Other names:</span>
