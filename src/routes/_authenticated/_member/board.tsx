@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
+import village from "@/assets/village-meadow.jpg";
 import { boardQuery, filterProviders, type Sort, type TimeFilter } from "@/lib/board";
 import { CATEGORIES, CATEGORY_LABEL, type Category } from "@/lib/categories";
 import { ProviderCard } from "@/components/ProviderCard";
@@ -29,6 +30,10 @@ function Board() {
 
   return (
     <div>
+      <div className="relative mb-4 overflow-hidden rounded-3xl">
+        <img src={village} alt="" width={1920} height={912} className="h-44 w-full object-cover md:h-60" />
+        <h1 className="absolute bottom-3 left-5 font-display text-4xl text-foreground md:text-5xl" style={{ textShadow: "0 1px 12px var(--background)" }}>What the village recommends</h1>
+      </div>
       <section className="rounded-2xl bg-foreground p-6 text-background">
         <div className="flex flex-wrap items-end gap-x-8 gap-y-2">
           <div><div className="font-display text-5xl font-extrabold text-marigold">{data.length}</div><div className="text-sm opacity-80">recommendations</div></div>

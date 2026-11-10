@@ -76,23 +76,25 @@
   --color-positive: var(--positive);
   --color-negative: var(--negative);
   --color-mixed: var(--mixed);
-  --font-display: "Cabinet Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Instrument Serif", ui-serif, Georgia, serif;
+  --color-meadow: var(--meadow);
+  --color-sky: var(--sky);
   --font-sans: "Satoshi", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
   --radius: 0.875rem;
-  --background: oklch(0.958 0.011 140);
+  --background: oklch(0.97 0.014 85);
   --foreground: oklch(0.29 0.05 265);
   --card: oklch(0.86 0.068 80);
   --card-foreground: oklch(0.29 0.05 265);
-  --popover: oklch(0.985 0.006 140);
+  --popover: oklch(0.99 0.008 85);
   --popover-foreground: oklch(0.29 0.05 265);
-  --primary: oklch(0.52 0.09 160);
+  --primary: oklch(0.5 0.1 145);
   --primary-foreground: oklch(0.985 0.01 140);
-  --secondary: oklch(0.92 0.02 140);
+  --secondary: oklch(0.93 0.03 120);
   --secondary-foreground: oklch(0.29 0.05 265);
-  --muted: oklch(0.92 0.015 140);
+  --muted: oklch(0.93 0.02 100);
   --muted-foreground: oklch(0.45 0.04 265);
   --accent: oklch(0.8 0.15 80);
   --accent-foreground: oklch(0.29 0.05 265);
@@ -100,7 +102,9 @@
   --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(0.29 0.05 265 / 14%);
   --input: oklch(0.29 0.05 265 / 22%);
-  --ring: oklch(0.52 0.09 160);
+  --ring: oklch(0.5 0.1 145);
+  --meadow: oklch(0.5 0.1 145);
+  --sky: oklch(0.7 0.09 240);
   --kraft: oklch(0.86 0.068 80);
   --kraft-deep: oklch(0.76 0.075 75);
   --marigold: oklch(0.8 0.15 80);
@@ -126,7 +130,8 @@
 @layer base {
   * { border-color: var(--color-border); }
   body { background-color: var(--color-background); color: var(--color-foreground); font-family: var(--font-sans); }
-  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.01em; }
+  h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 400 !important; letter-spacing: -0.015em; }
+  .font-display { font-weight: 400 !important; letter-spacing: -0.015em; }
 }
 
 @utility kraft-card {
@@ -139,4 +144,8 @@
 }
 @utility highlight {
   background: linear-gradient(transparent 55%, color-mix(in oklab, var(--marigold) 70%, transparent) 55%);
+}
+
+@utility village-fade {
+  mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, black 60%, transparent 100%);
 }
