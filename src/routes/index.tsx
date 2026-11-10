@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <div className="min-h-screen">
-      <div className="mx-auto max-w-5xl px-4 py-6 flex items-center">
+      <div className="mx-auto max-w-6xl px-4 py-6 flex items-center">
         <span className="grid size-9 place-items-center rounded-lg bg-marigold font-display text-xl font-extrabold">P</span>
         <span className="ml-2 font-display text-xl font-extrabold">Parent Picks</span>
         <Button asChild variant="ghost" className="ml-auto"><Link to="/auth">Sign in</Link></Button>
@@ -35,7 +35,7 @@ function Index() {
           </p>
           <Button asChild size="lg" className="mt-8 h-12 rounded-full px-7 text-base"><Link to="/auth">Enter the village</Link></Button>
         </div>
-        <img src={village} alt="A tiny clay village park with parents and children walking, a playground, pond and corner café" width={1600} height={1008} className="w-full" />
+        <img src={village} alt="A tiny clay village park with parents and children walking, a playground, pond and corner café" width={1600} height={1008} className="village-fade w-full mix-blend-multiply" />
       </section>
     </div>
   );
