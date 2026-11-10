@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { parseWhatsApp, readChatFile } from "@/lib/whatsapp";
-import { finalizeUpload, processChunk, startUpload } from "@/lib/pipeline.functions";
+import { finalizeUpload, lookupContacts, processChunk, startUpload } from "@/lib/pipeline.functions";
 
 export const Route = createFileRoute("/_authenticated/_member/admin/upload")({
   head: () => ({ meta: [{ title: "Upload chat — Parent Picks" }, { name: "description", content: "Upload a WhatsApp chat export." }] }),
@@ -29,11 +29,11 @@ function Upload() {
 Reply here if you have questions or concerns before we upload the chat.`;
   const [consent, setConsent] = useState(false);
   const [file, setFile] = useState<File | null>(null);
-  const [stage, setStage] = useState<"idle" | "reading" | "processing" | "grouping" | "done" | "error">("idle");
+  const [stage, setStage] = useState<"idle" | "reading" | "processing" | "grouping" | "contacts" | "done" | "error">("idle");
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<{ messages: number; recs: number; mentions: number } | null>(null);
   const [err, setErr] = useState<string | null>(null);
-  const start = useServerFn(startUpload), chunk = useServerFn(processChunk), finish = useServerFn(finalizeUpload);
+  const start = useServerFn(startUpload), chunk = useServerFn(processChunk), finish = useServerFn(finalizeUpload), contacts = useServerFn(lookupContacts);
   const qc = useQueryClient();
 
   async function run() {
@@ -52,6 +52,11 @@ Reply here if you have questions or concerns before we upload the chat.`;
       }
       setStage("grouping"); setProgress(85);
       const r = await finish({ data: { neighborhoodId: group.neighborhoodId, uploadId } });
+      setStage("contacts"); setProgress(90);
+      for (let i = 0; i < r.providerIds.length; i += 4) {
+        try { await contacts({ data: { neighborhoodId: group.neighborhoodId, providerIds: r.providerIds.slice(i, i + 4) } }); } catch { /* contact info can be refreshed from Review */ }
+        setProgress(90 + Math.round(((i + 4) / r.providerIds.length) * 9));
+      }
       setProgress(100); setStage("done");
       setResult({ messages: msgs.length, recs: r.recommendations, mentions: r.mentions });
       setFile(null);
@@ -60,8 +65,8 @@ Reply here if you have questions or concerns before we upload the chat.`;
       setStage("error"); setErr(e instanceof Error ? e.message : "Something went wrong");
     }
   }
-  const busy = stage === "reading" || stage === "processing" || stage === "grouping";
-  const label = { idle: "", reading: "Reading the chat…", processing: "Finding recommendations…", grouping: "Matching names and writing summaries…", done: "Done!", error: "" }[stage];
+  const busy = stage === "reading" || stage === "processing" || stage === "grouping" || stage === "contacts";
+  const label = { idle: "", reading: "Reading the chat…", processing: "Finding recommendations…", grouping: "Matching names and writing summaries…", contacts: "Looking up websites and phone numbers…", done: "Done!", error: "" }[stage];
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">

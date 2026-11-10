@@ -28,3 +28,21 @@ export function breakdown(p: { positive: number; negative: number; mixed: number
   if (p.mixed) parts.push(`${p.mixed} mixed`);
   return parts.join(", ");
 }
+
+/** Brands and shops only need a website; local providers also get phone, address and booking link. */
+export const WEBSITE_ONLY_CATEGORIES = ["clothing brands", "toys", "stores"] as const;
+export function websiteOnly(category: string) {
+  return (WEBSITE_ONLY_CATEGORIES as readonly string[]).includes(category);
+}
+export function cleanUrl(u: string | null | undefined): string | null {
+  if (!u) return null;
+  const t = u.trim();
+  if (!t) return null;
+  try {
+    const url = new URL(/^https?:\/\//i.test(t) ? t : `https://${t}`);
+    return url.protocol === "https:" || url.protocol === "http:" ? url.toString() : null;
+  } catch { return null; }
+}
+export function mapsUrl(address: string) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+}

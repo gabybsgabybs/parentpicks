@@ -1,11 +1,12 @@
 import { generateResponse } from "@lovable.dev/ai-gateway";
 
-export async function aiJson<T>(instructions: string, input: string, schemaName: string, schema: Record<string, unknown>): Promise<T> {
+export async function aiJson<T>(instructions: string, input: string, schemaName: string, schema: Record<string, unknown>, opts: { webSearch?: boolean } = {}): Promise<T> {
   const res = await generateResponse({
     model: "openai/gpt-6-astra",
     instructions,
     input,
     text: { format: { type: "json_schema", name: schemaName, schema, strict: true } },
+    ...(opts.webSearch ? { tools: [{ type: "web_search" as const }] } : {}),
   });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const r = res as any;
