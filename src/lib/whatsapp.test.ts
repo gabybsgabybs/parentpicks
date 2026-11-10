@@ -26,3 +26,17 @@ describe("board rules", () => {
     expect(yearRange("2022-01-01", "2026-03-01")).toBe("Mentioned 2022 to 2026");
   });
 });
+
+import { cleanUrl, websiteOnly } from "./categories";
+describe("contact info rules", () => {
+  it("brands, toys and stores get website only", () => {
+    expect(websiteOnly("clothing brands")).toBe(true);
+    expect(websiteOnly("toys")).toBe(true);
+    expect(websiteOnly("stores")).toBe(true);
+    expect(websiteOnly("dentist")).toBe(false);
+  });
+  it("only keeps web links", () => {
+    expect(cleanUrl("smilebright.com")).toBe("https://smilebright.com/");
+    expect(cleanUrl("javascript:alert(1)")).toBeNull();
+  });
+});
