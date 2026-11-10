@@ -28,3 +28,8 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project rules
+- Chat exports are parsed in the browser and sent to server functions in chunks; the raw file is never stored — only extracted mentions with SHA-256 sender hashes (privacy requirement).
+- AI calls live in `src/lib/pipeline.functions.ts` (admin-checked via `is_admin` RPC, writes via service client); provider counts are recomputed only by the `recompute_provider` SQL function so "one opinion per parent" stays in one place.
+- Access is per neighborhood via `memberships` + `is_member`/`is_admin` security-definer functions; `mentions.sender_hash` is excluded from column grants so it never reaches clients.
