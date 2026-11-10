@@ -10,33 +10,142 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedMemberRouteRouteImport } from './routes/_authenticated/_member/route'
+import { Route as AuthenticatedJoinRouteImport } from './routes/_authenticated/join'
+import { Route as AuthenticatedMemberBoardRouteImport } from './routes/_authenticated/_member/board'
+import { Route as AuthenticatedMemberAdminMembersRouteImport } from './routes/_authenticated/_member/admin/members'
+import { Route as AuthenticatedMemberAdminReviewRouteImport } from './routes/_authenticated/_member/admin/review'
+import { Route as AuthenticatedMemberAdminUploadRouteImport } from './routes/_authenticated/_member/admin/upload'
+import { Route as AuthenticatedMemberPIdRouteImport } from './routes/_authenticated/_member/p/$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedMemberRouteRoute =
+  AuthenticatedMemberRouteRouteImport.update({
+    id: '/_member',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedJoinRoute = AuthenticatedJoinRouteImport.update({
+  id: '/join',
+  path: '/join',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMemberBoardRoute =
+  AuthenticatedMemberBoardRouteImport.update({
+    id: '/board',
+    path: '/board',
+    getParentRoute: () => AuthenticatedMemberRouteRoute,
+  } as any)
+const AuthenticatedMemberAdminMembersRoute =
+  AuthenticatedMemberAdminMembersRouteImport.update({
+    id: '/admin/members',
+    path: '/admin/members',
+    getParentRoute: () => AuthenticatedMemberRouteRoute,
+  } as any)
+const AuthenticatedMemberAdminReviewRoute =
+  AuthenticatedMemberAdminReviewRouteImport.update({
+    id: '/admin/review',
+    path: '/admin/review',
+    getParentRoute: () => AuthenticatedMemberRouteRoute,
+  } as any)
+const AuthenticatedMemberAdminUploadRoute =
+  AuthenticatedMemberAdminUploadRouteImport.update({
+    id: '/admin/upload',
+    path: '/admin/upload',
+    getParentRoute: () => AuthenticatedMemberRouteRoute,
+  } as any)
+const AuthenticatedMemberPIdRoute = AuthenticatedMemberPIdRouteImport.update({
+  id: '/p/$id',
+  path: '/p/$id',
+  getParentRoute: () => AuthenticatedMemberRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/join': typeof AuthenticatedJoinRoute
+  '/board': typeof AuthenticatedMemberBoardRoute
+  '/admin/members': typeof AuthenticatedMemberAdminMembersRoute
+  '/admin/review': typeof AuthenticatedMemberAdminReviewRoute
+  '/admin/upload': typeof AuthenticatedMemberAdminUploadRoute
+  '/p/$id': typeof AuthenticatedMemberPIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/join': typeof AuthenticatedJoinRoute
+  '/board': typeof AuthenticatedMemberBoardRoute
+  '/admin/members': typeof AuthenticatedMemberAdminMembersRoute
+  '/admin/review': typeof AuthenticatedMemberAdminReviewRoute
+  '/admin/upload': typeof AuthenticatedMemberAdminUploadRoute
+  '/p/$id': typeof AuthenticatedMemberPIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/_member': typeof AuthenticatedMemberRouteRouteWithChildren
+  '/_authenticated/join': typeof AuthenticatedJoinRoute
+  '/_authenticated/_member/board': typeof AuthenticatedMemberBoardRoute
+  '/_authenticated/_member/admin/members': typeof AuthenticatedMemberAdminMembersRoute
+  '/_authenticated/_member/admin/review': typeof AuthenticatedMemberAdminReviewRoute
+  '/_authenticated/_member/admin/upload': typeof AuthenticatedMemberAdminUploadRoute
+  '/_authenticated/_member/p/$id': typeof AuthenticatedMemberPIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/join'
+    | '/board'
+    | '/admin/members'
+    | '/admin/review'
+    | '/admin/upload'
+    | '/p/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/join'
+    | '/board'
+    | '/admin/members'
+    | '/admin/review'
+    | '/admin/upload'
+    | '/p/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/_member'
+    | '/_authenticated/join'
+    | '/_authenticated/_member/board'
+    | '/_authenticated/_member/admin/members'
+    | '/_authenticated/_member/admin/review'
+    | '/_authenticated/_member/admin/upload'
+    | '/_authenticated/_member/p/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +157,111 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/_member': {
+      id: '/_authenticated/_member'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedMemberRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/join': {
+      id: '/_authenticated/join'
+      path: '/join'
+      fullPath: '/join'
+      preLoaderRoute: typeof AuthenticatedJoinRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/_member/board': {
+      id: '/_authenticated/_member/board'
+      path: '/board'
+      fullPath: '/board'
+      preLoaderRoute: typeof AuthenticatedMemberBoardRouteImport
+      parentRoute: typeof AuthenticatedMemberRouteRoute
+    }
+    '/_authenticated/_member/admin/members': {
+      id: '/_authenticated/_member/admin/members'
+      path: '/admin/members'
+      fullPath: '/admin/members'
+      preLoaderRoute: typeof AuthenticatedMemberAdminMembersRouteImport
+      parentRoute: typeof AuthenticatedMemberRouteRoute
+    }
+    '/_authenticated/_member/admin/review': {
+      id: '/_authenticated/_member/admin/review'
+      path: '/admin/review'
+      fullPath: '/admin/review'
+      preLoaderRoute: typeof AuthenticatedMemberAdminReviewRouteImport
+      parentRoute: typeof AuthenticatedMemberRouteRoute
+    }
+    '/_authenticated/_member/admin/upload': {
+      id: '/_authenticated/_member/admin/upload'
+      path: '/admin/upload'
+      fullPath: '/admin/upload'
+      preLoaderRoute: typeof AuthenticatedMemberAdminUploadRouteImport
+      parentRoute: typeof AuthenticatedMemberRouteRoute
+    }
+    '/_authenticated/_member/p/$id': {
+      id: '/_authenticated/_member/p/$id'
+      path: '/p/$id'
+      fullPath: '/p/$id'
+      preLoaderRoute: typeof AuthenticatedMemberPIdRouteImport
+      parentRoute: typeof AuthenticatedMemberRouteRoute
+    }
   }
 }
 
+interface AuthenticatedMemberRouteRouteChildren {
+  AuthenticatedMemberBoardRoute: typeof AuthenticatedMemberBoardRoute
+  AuthenticatedMemberAdminMembersRoute: typeof AuthenticatedMemberAdminMembersRoute
+  AuthenticatedMemberAdminReviewRoute: typeof AuthenticatedMemberAdminReviewRoute
+  AuthenticatedMemberAdminUploadRoute: typeof AuthenticatedMemberAdminUploadRoute
+  AuthenticatedMemberPIdRoute: typeof AuthenticatedMemberPIdRoute
+}
+
+const AuthenticatedMemberRouteRouteChildren: AuthenticatedMemberRouteRouteChildren =
+  {
+    AuthenticatedMemberBoardRoute: AuthenticatedMemberBoardRoute,
+    AuthenticatedMemberAdminMembersRoute: AuthenticatedMemberAdminMembersRoute,
+    AuthenticatedMemberAdminReviewRoute: AuthenticatedMemberAdminReviewRoute,
+    AuthenticatedMemberAdminUploadRoute: AuthenticatedMemberAdminUploadRoute,
+    AuthenticatedMemberPIdRoute: AuthenticatedMemberPIdRoute,
+  }
+
+const AuthenticatedMemberRouteRouteWithChildren =
+  AuthenticatedMemberRouteRoute._addFileChildren(
+    AuthenticatedMemberRouteRouteChildren,
+  )
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedMemberRouteRoute: typeof AuthenticatedMemberRouteRouteWithChildren
+  AuthenticatedJoinRoute: typeof AuthenticatedJoinRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedMemberRouteRoute: AuthenticatedMemberRouteRouteWithChildren,
+  AuthenticatedJoinRoute: AuthenticatedJoinRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
