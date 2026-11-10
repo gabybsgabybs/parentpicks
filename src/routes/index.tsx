@@ -40,7 +40,7 @@ function Index() {
             Your village already <em className="text-primary">knows</em> the answer.
           </h1>
           <p className="mt-5 max-w-md text-lg text-muted-foreground">
-            Your group has answered that a dozen times. Parent Picks turns years of WhatsApp chat into one board you can search — ranked by how many parents recommended each place.
+            Every pediatrician, dentist and swim class your group has ever loved — Parent Picks turns years of WhatsApp chat into one board you can search — ranked by how many parents recommended each place.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild size="lg" className="h-12 px-6 text-base"><Link to="/auth">Sign in with your email</Link></Button>
