@@ -24,7 +24,7 @@ export const startUpload = createServerFn({ method: "POST" })
     return { uploadId: up.id };
   });
 
-const msgSchema = z.object({ sender: z.string().max(200), date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), text: z.string().max(4000) });
+const msgSchema = z.object({ sender: z.string().max(200), date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), text: z.string().transform((t) => t.slice(0, 4000)) });
 
 export const processChunk = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
