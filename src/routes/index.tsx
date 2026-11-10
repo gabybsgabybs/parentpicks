@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
+import village from "@/assets/village-meadow.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -29,10 +30,14 @@ function Index() {
         <span className="ml-2 font-display text-xl font-extrabold">Parent Picks</span>
         <Button asChild variant="ghost" className="ml-auto"><Link to="/auth">Sign in</Link></Button>
       </div>
-      <section className="mx-auto grid max-w-5xl gap-10 px-4 pb-20 pt-8 md:grid-cols-[1.2fr_1fr] md:items-center">
+      <div className="mx-auto max-w-6xl px-4">
+        <img src={village} alt="A little village meadow with parents, strollers and children playing by a stream" width={1920} height={912} className="village-fade w-full" />
+      </div>
+      <section className="mx-auto grid max-w-5xl gap-10 px-4 pb-20 pt-4 md:grid-cols-[1.2fr_1fr] md:items-center">
         <div>
-          <h1 className="font-display text-5xl font-extrabold leading-[1.02] md:text-6xl">
-            “Any good pediatric <span className="highlight">dentists?</span>”
+          <p className="text-sm font-bold uppercase tracking-widest text-primary">It takes a village</p>
+          <h1 className="mt-3 font-display text-6xl leading-[0.95] md:text-7xl">
+            Your village already <em className="text-primary">knows</em> the answer.
           </h1>
           <p className="mt-5 max-w-md text-lg text-muted-foreground">
             Your group has answered that a dozen times. Parent Picks turns years of WhatsApp chat into one board you can search — ranked by how many parents recommended each place.
