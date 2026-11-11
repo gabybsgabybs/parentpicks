@@ -6,7 +6,7 @@ export type Provider = {
   id: string; neighborhood_id: string; name: string; aliases: string[]; category: string; summary: string; location: string | null;
   status: string; self_promo_flag: boolean; parent_count: number; positive: number; negative: number; mixed: number;
   first_mention: string | null; last_mention: string | null;
-  website: string | null; phone: string | null; address: string | null; booking_url: string | null; contact_checked_at: string | null;
+  website: string | null; phone: string | null; address: string | null; booking_url: string | null; contact_checked_at: string | null; contact_unverified: boolean;
 };
 
 export const boardQuery = (nb: string) => queryOptions({
@@ -18,6 +18,27 @@ export const boardQuery = (nb: string) => queryOptions({
     return data as Provider[];
   },
 });
+
+/** Review text per place, so search can match what parents said. */
+export const reviewTextQuery = (nb: string) => queryOptions({
+  queryKey: ["review-text", nb],
+  queryFn: async () => {
+    const { data, error } = await supabase.from("mentions").select("provider_id, paraphrase").eq("neighborhood_id", nb).not("provider_id", "is", null).limit(5000);
+    if (error) throw error;
+    const map: Record<string, string> = {};
+    for (const m of data ?? []) if (m.provider_id) map[m.provider_id] = (map[m.provider_id] ?? "") + " " + m.paraphrase.toLowerCase();
+    return map;
+  },
+});
+
+export function searchProviders(list: Provider[], q: string, reviews: Record<string, string>) {
+  const words = q.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  if (!words.length) return list;
+  return list.filter((p) => {
+    const hay = [p.name, ...p.aliases, p.category, p.summary, p.location ?? "", reviews[p.id] ?? ""].join(" ").toLowerCase();
+    return words.every((w) => hay.includes(w));
+  });
+}
 
 export type Sort = "parents" | "positive" | "recent";
 export type TimeFilter = "all" | "1y" | "2y";
