@@ -17,7 +17,7 @@ export const MAX_TIP_CENTS = 50000;
 // (payment history, refunds) resolvable — Session metadata is not searchable.
 async function resolveOrCreateCustomer(
   stripe: ReturnType<typeof createStripeClient>,
-  options: { email?: string; userId?: string },
+  options: { email?: string | undefined; userId?: string | undefined },
 ): Promise<string> {
   // userId is interpolated into a Stripe Search query string below;
   // reject anything that could break out of the quoted value.
@@ -29,13 +29,14 @@ async function resolveOrCreateCustomer(
       query: `metadata['userId']:'${options.userId}'`,
       limit: 1,
     });
-    if (found.data.length) return found.data[0].id;
+    const match = found.data[0];
+    if (match) return match.id;
   }
   if (options.email) {
     const existing = await stripe.customers.list({ email: options.email, limit: 1 });
-    if (existing.data.length) {
-      const customer = existing.data[0];
-      if (options.userId && customer.metadata?.userId !== options.userId) {
+    const customer = existing.data[0];
+    if (customer) {
+      if (options.userId && customer.metadata?.["userId"] !== options.userId) {
         await stripe.customers.update(customer.id, {
           metadata: { ...customer.metadata, userId: options.userId },
         });
@@ -86,7 +87,7 @@ export const createTipCheckout = createServerFn({ method: "POST" })
       // caller-supplied email.
       const { data: { user } } = await context.supabase.auth.getUser();
       const customerId = await resolveOrCreateCustomer(stripe, {
-        email: user?.email ?? undefined,
+        email: user?.email,
         userId: context.userId,
       });
 
