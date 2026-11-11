@@ -1,0 +1,98 @@
+{
+  "version": 1,
+  "sdk_version": "3.4.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://jjswwevwsiygkuelhzmh.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "parentpicks",
+      "version": "0.1.0",
+      "title": "Parentpicks"
+    },
+    "tools": [
+      {
+        "name": "search_recommendations",
+        "title": "Search recommendations",
+        "description": "Search parent-recommended places in your neighborhoods by keyword and/or category, ranked by how many parents recommend them.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Keywords, e.g. 'dentist' or 'swim'."
+            },
+            "category": {
+              "type": "string",
+              "maxLength": 60,
+              "description": "Category id from list_categories, e.g. 'pediatricians'."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "description": "Max results (default 15)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_recommendation",
+        "title": "Get recommendation details",
+        "description": "Get one place's details, contact info and anonymous parent comments by its id.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Place id from search_recommendations."
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_categories",
+        "title": "List categories",
+        "description": "List recommendation categories with how many places each has.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
