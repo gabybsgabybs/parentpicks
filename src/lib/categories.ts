@@ -10,6 +10,9 @@ export const CATEGORIES = [
   "real estate and tenants", "birthday party venues", "dinner delivery and takeout",
   "kid-friendly restaurants", "travel and outings", "haircuts and styling",
   "photographers", "pets", "local businesses",
+  "kid-friendly restaurants and cafes", "toys and books", "doctors and specialists",
+  "birthday party venues and entertainers", "elementary and K-12 schools", "mental health",
+  "home services and contractors",
 ] as const;
 export type Category = (typeof CATEGORIES)[number];
 export const CATEGORY_LABEL: Record<Category, string> = {
@@ -29,6 +32,10 @@ export const CATEGORY_LABEL: Record<Category, string> = {
   "kid-friendly restaurants": "Kid-friendly restaurants", "travel and outings": "Travel & outings",
   "haircuts and styling": "Haircuts & styling", photographers: "Photographers", pets: "Pets",
   "local businesses": "Local businesses",
+  "kid-friendly restaurants and cafes": "Kid-friendly restaurants & cafes", "toys and books": "Toys & books",
+  "doctors and specialists": "Doctors & specialists", "birthday party venues and entertainers": "Birthday venues & entertainers",
+  "elementary and K-12 schools": "Elementary & K-12 schools", "mental health": "Mental health",
+  "home services and contractors": "Home services & contractors",
 };
 export const MIN_PARENTS = 2;
 export const OLD_AFTER_YEARS = 2;
@@ -55,7 +62,7 @@ export function breakdown(p: { positive: number; negative: number; mixed: number
 export const WEBSITE_ONLY_CATEGORIES = [
   "clothing brands", "toys", "stores",
   "shoes and clothes", "strollers and car seats", "feeding and home gear",
-  "travel with kids", "toddler tower and furniture", "utilities, cars and money",
+  "travel with kids", "toddler tower and furniture", "utilities, cars and money", "toys and books",
 ] as const;
 export function websiteOnly(category: string) {
   return (WEBSITE_ONLY_CATEGORIES as readonly string[]).includes(category);
