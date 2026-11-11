@@ -7,7 +7,7 @@ import { getStripe, safeStripeEnvironment } from "@/lib/stripe";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const CHIPS = [500, 1000, 2500];
+const CHIPS = [200, 500, 1000];
 
 function toCents(raw: string): number | null {
   const cleaned = raw.replace(/[^0-9.]/g, "");
@@ -27,7 +27,7 @@ function dollars(cents: number): string {
 
 export function TipJar({ thanks = false }: { thanks?: boolean }) {
   const environment = safeStripeEnvironment();
-  const [picked, setPicked] = useState<number | "custom">(1000);
+  const [picked, setPicked] = useState<number | "custom">(500);
   const [customInput, setCustomInput] = useState("");
   const [sessionCents, setSessionCents] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
