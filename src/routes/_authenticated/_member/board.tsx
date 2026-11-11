@@ -4,13 +4,14 @@ import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import village from "@/assets/village-meadow.jpg";
 import { boardQuery, filterProviders, type Sort, type TimeFilter } from "@/lib/board";
+import { categoryHighlights } from "@/lib/board-highlights";
 import { CATEGORIES, CATEGORY_LABEL, type Category } from "@/lib/categories";
 import { ProviderCard } from "@/components/ProviderCard";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Route = createFileRoute("/_authenticated/_member/board")({
-  head: () => ({ meta: [{ title: "Board — Parent Picks" }, { name: "description", content: "Search every recommendation your group has shared." }] }),
+  head: () => ({ meta: [{ title: "Board — Parent Picks" }, { name: "description", content: "Search every recommendation your group has shared." }, { property: "og:title", content: "Board — Parent Picks" }, { property: "og:description", content: "Explore your village's parent recommendations." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   loader: ({ context }) => context.queryClient.ensureQueryData(boardQuery(context.group.neighborhoodId)),
   component: Board,
 });
@@ -26,7 +27,7 @@ function Board() {
   const list = useMemo(() => filterProviders(data, { q, category, location, time, sort }), [data, q, category, location, time, sort]);
   const locations = [...new Set(data.map((p) => p.location).filter(Boolean) as string[])].sort();
   const cats = CATEGORIES.filter((c) => data.some((p) => p.category === c));
-  const tops = cats.map((c) => data.filter((p) => p.category === c).sort((a, b) => b.positive - a.positive || b.parent_count - a.parent_count)[0]!);
+  const tops = useMemo(() => categoryHighlights(data), [data]);
 
   return (
     <div>

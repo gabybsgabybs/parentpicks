@@ -147,5 +147,5 @@
 }
 
 @utility village-fade {
-  mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, black 60%, transparent 100%);
+  mask-image: radial-gradient(ellipse 68% 65% at 50% 50%, black 42%, transparent 74%);
 }
