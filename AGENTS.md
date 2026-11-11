@@ -35,3 +35,4 @@ use the editor.
 - AI calls live in `src/lib/pipeline.functions.ts` (admin-checked via `is_admin` RPC, writes via service client); provider counts are recomputed only by the `recompute_provider` SQL function so "one opinion per parent" stays in one place.
 - Access is per neighborhood via `memberships` + `is_member`/`is_admin` security-definer functions; `mentions.sender_hash` is excluded from column grants so it never reaches clients.
 - Provider contact info (website/phone/address/booking) comes only from AI web search in `lookupContacts`, run after uploads or from Review; brand/store categories store website only (`websiteOnly` in categories.ts) so the rule lives in one place.
+- Tips are one-time with no product catalog: the session is built in `src/lib/tip.functions.ts` from inline `price_data`, and the cash-donation tax code must stay paired with the compliance-handling opt-out, because that code is ineligible for the account's default end-to-end handling.
