@@ -22,6 +22,27 @@
       "when": 1794344534249,
       "tag": "0002_admin_invite_gabi",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794356001014,
+      "tag": "0003_widen_provider_categories",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794356058746,
+      "tag": "0004_import_duboce_recommendations_1",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794356117815,
+      "tag": "0005_import_duboce_recommendations_2",
+      "breakpoints": true
     }
   ]
 }
