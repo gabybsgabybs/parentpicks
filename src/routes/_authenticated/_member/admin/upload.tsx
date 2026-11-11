@@ -73,6 +73,7 @@ Reply here if you have questions or concerns before we upload the chat.`;
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <h1 className="font-display text-4xl font-extrabold">Upload a chat</h1>
+      {item && <p className="rounded-lg border border-border bg-card px-3 py-2 text-sm">Adding your take on <b>{item}</b>: share it in the WhatsApp group, then upload the latest chat here.</p>}
 
       <section className="rounded-2xl border border-border bg-popover p-5">
         <h2 className="font-display text-xl font-extrabold">1. Tell the group first</h2>
