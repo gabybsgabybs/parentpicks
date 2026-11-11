@@ -61,9 +61,15 @@ function Board() {
         </section>
       ) : (
         <>
-
+          {groups.length > 1 && (
+            <nav aria-label="Jump to section" className="sticky top-[61px] z-10 -mx-4 mt-6 flex gap-2 overflow-x-auto bg-background/90 px-4 py-2 backdrop-blur [scrollbar-width:none]">
+              {groups.map((g) => (
+                <a key={g.name} href={`#sec-${g.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`} className="shrink-0 rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium hover:bg-secondary">{g.name}</a>
+              ))}
+            </nav>
+          )}
           {groups.map((g) => (
-            <section key={g.name} className="mt-8">
+            <section key={g.name} id={`sec-${g.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`} className="mt-8 scroll-mt-32">
               <h2 className="font-display text-3xl">{g.name}</h2>
               <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {g.cards.map((c) => (
