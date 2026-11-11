@@ -23,8 +23,7 @@ const sampleReviews = [
 
 const faqs = [
   { question: "Who can see our group's recommendations?", answer: "Your group's board is for signed-in members who have joined with its invite code. The public examples on this page are illustrative, not excerpts from a private chat." },
-  { question: "What happens to the WhatsApp chat?", answer: "The export is parsed in your browser. The raw chat file is not stored by Parent Picks; only extracted recommendation notes are saved. Sender names are replaced before AI processing, and saved sender identifiers are hashed." },
-  { question: "Will my name or my child's details appear?", answer: "No parent names, initials or personal phone numbers are displayed. Notes are attributed to ‘A parent’ and paraphrased, not quoted. Children's names, ages and health information are excluded from summaries." },
+  { question: "Are the reviews anonymized?", answer: "Yes. Every review is anonymized: no parent names, initials or phone numbers are shown, and each note is simply attributed to ‘A parent’. Notes are paraphrased, not quoted, and children's names, ages and health details are left out." },
   { question: "Are these independent parent reviews?", answer: "Recommendations come from conversations shared by parents, not reviews written by Parent Picks or endorsements by the businesses. Suspected self-promotion can be flagged for admin review. Positive, mixed and negative experiences can all appear; being listed is not a guarantee of quality." },
   { question: "Are the reviews and contact details verified?", answer: "Recommendations as shared by parents in the group. Summaries are written by AI and may contain mistakes. Not verified. Contact details found online can also be out of date or match the wrong business, so please double-check before booking." },
 ];
