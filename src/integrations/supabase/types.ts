@@ -389,6 +389,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_manage_review: {
+        Args: {
+          _action: string
+          _mention: string
+          _neighborhood: string
+          _paraphrase?: string
+          _provider: string
+          _sentiment?: string
+        }
+        Returns: undefined
+      }
       is_admin: { Args: { _nb: string }; Returns: boolean }
       is_member: { Args: { _nb: string }; Returns: boolean }
       join_with_code: { Args: { _code: string }; Returns: string }
