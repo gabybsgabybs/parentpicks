@@ -52,7 +52,11 @@ export function breakdown(p: { positive: number; negative: number; mixed: number
 }
 
 /** Brands and shops only need a website; local providers also get phone, address and booking link. */
-export const WEBSITE_ONLY_CATEGORIES = ["clothing brands", "toys", "stores"] as const;
+export const WEBSITE_ONLY_CATEGORIES = [
+  "clothing brands", "toys", "stores",
+  "shoes and clothes", "strollers and car seats", "feeding and home gear",
+  "travel with kids", "toddler tower and furniture", "utilities, cars and money",
+] as const;
 export function websiteOnly(category: string) {
   return (WEBSITE_ONLY_CATEGORIES as readonly string[]).includes(category);
 }
