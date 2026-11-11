@@ -34,6 +34,7 @@ const reviewQuery = (nb: string) => queryOptions({
 });
 
 export const Route = createFileRoute("/_authenticated/_member/admin/review")({
+  loader: ({ context }) => context.group.role === "admin" ? context.queryClient.ensureQueryData(reviewQuery(context.group.neighborhoodId)) : undefined,
   head: () => ({ meta: [{ title: "Admin central — Parent Picks" }, { name: "description", content: "Manage businesses, categories, summaries and anonymous parent reviews." }, { property: "og:title", content: "Admin central — Parent Picks" }, { property: "og:description", content: "Manage your group's recommendations and parent reviews." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: () => <AdminOnly><Review /></AdminOnly>,
 });
