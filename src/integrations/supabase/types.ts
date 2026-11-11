@@ -82,6 +82,78 @@ export type Database = {
           },
         ]
       }
+      import_mentions: {
+        Row: {
+          mentioned_at: string | null
+          n: number | null
+          name: string | null
+          paraphrase: string | null
+          sentiment: string | null
+        }
+        Insert: {
+          mentioned_at?: string | null
+          n?: number | null
+          name?: string | null
+          paraphrase?: string | null
+          sentiment?: string | null
+        }
+        Update: {
+          mentioned_at?: string | null
+          n?: number | null
+          name?: string | null
+          paraphrase?: string | null
+          sentiment?: string | null
+        }
+        Relationships: []
+      }
+      import_providers: {
+        Row: {
+          address: string | null
+          booking_url: string | null
+          category: string | null
+          first_mention: string | null
+          last_mention: string | null
+          location: string | null
+          name: string | null
+          negative: number | null
+          parent_count: number | null
+          phone: string | null
+          positive: number | null
+          summary: string | null
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          booking_url?: string | null
+          category?: string | null
+          first_mention?: string | null
+          last_mention?: string | null
+          location?: string | null
+          name?: string | null
+          negative?: number | null
+          parent_count?: number | null
+          phone?: string | null
+          positive?: number | null
+          summary?: string | null
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          booking_url?: string | null
+          category?: string | null
+          first_mention?: string | null
+          last_mention?: string | null
+          location?: string | null
+          name?: string | null
+          negative?: number | null
+          parent_count?: number | null
+          phone?: string | null
+          positive?: number | null
+          summary?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
       match_suggestions: {
         Row: {
           created_at: string
