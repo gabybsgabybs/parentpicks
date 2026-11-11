@@ -11,6 +11,7 @@ export const Route = createFileRoute("/_authenticated/_member")({
   },
   component: () => (
     <div className="min-h-screen">
+      <PaymentTestModeBanner />
       <AppHeader />
       <main className="mx-auto max-w-5xl px-4 pb-20 pt-6"><Outlet /></main>
     </div>
