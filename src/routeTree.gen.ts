@@ -16,6 +16,7 @@ import { Route as McpRouteImport } from './routes/mcp'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AuthenticatedMemberRouteRouteImport } from './routes/_authenticated/_member/route'
 import { Route as AuthenticatedJoinRouteImport } from './routes/_authenticated/join'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as AuthenticatedMemberBoardRouteImport } from './routes/_authenticated/_member/board'
 import { Route as AuthenticatedMemberAdminMembersRouteImport } from './routes/_authenticated/_member/admin/members'
 import { Route as AuthenticatedMemberAdminReviewRouteImport } from './routes/_authenticated/_member/admin/review'
@@ -57,6 +58,11 @@ const AuthenticatedJoinRoute = AuthenticatedJoinRouteImport.update({
   path: '/join',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedMemberBoardRoute =
   AuthenticatedMemberBoardRouteImport.update({
     id: '/board',
@@ -93,6 +99,7 @@ export interface FileRoutesByFullPath {
   '/mcp': typeof McpRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/join': typeof AuthenticatedJoinRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/board': typeof AuthenticatedMemberBoardRoute
   '/admin/members': typeof AuthenticatedMemberAdminMembersRoute
   '/admin/review': typeof AuthenticatedMemberAdminReviewRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByTo {
   '/mcp': typeof McpRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/join': typeof AuthenticatedJoinRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/board': typeof AuthenticatedMemberBoardRoute
   '/admin/members': typeof AuthenticatedMemberAdminMembersRoute
   '/admin/review': typeof AuthenticatedMemberAdminReviewRoute
@@ -120,6 +128,7 @@ export interface FileRoutesById {
   '/_authenticated/_member': typeof AuthenticatedMemberRouteRouteWithChildren
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/join': typeof AuthenticatedJoinRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/_authenticated/_member/board': typeof AuthenticatedMemberBoardRoute
   '/_authenticated/_member/admin/members': typeof AuthenticatedMemberAdminMembersRoute
   '/_authenticated/_member/admin/review': typeof AuthenticatedMemberAdminReviewRoute
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/.well-known/oauth-protected-resource'
     | '/join'
+    | '/.lovable/oauth/consent'
     | '/board'
     | '/admin/members'
     | '/admin/review'
@@ -146,6 +156,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/.well-known/oauth-protected-resource'
     | '/join'
+    | '/.lovable/oauth/consent'
     | '/board'
     | '/admin/members'
     | '/admin/review'
@@ -160,6 +171,7 @@ export interface FileRouteTypes {
     | '/_authenticated/_member'
     | '/.well-known/oauth-protected-resource'
     | '/_authenticated/join'
+    | '/.lovable/oauth/consent'
     | '/_authenticated/_member/board'
     | '/_authenticated/_member/admin/members'
     | '/_authenticated/_member/admin/review'
@@ -173,6 +185,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   McpRoute: typeof McpRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -225,6 +238,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/join'
       preLoaderRoute: typeof AuthenticatedJoinRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/_member/board': {
       id: '/_authenticated/_member/board'
@@ -306,6 +326,7 @@ const rootRouteChildren: RootRouteChildren = {
   McpRoute: McpRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
