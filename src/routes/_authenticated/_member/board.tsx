@@ -4,11 +4,20 @@ import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import village from "@/assets/village-meadow.jpg";
 import { boardQuery, reviewTextQuery, searchProviders } from "@/lib/board";
-import { groupedCategories, isRecommendation, isThin } from "@/lib/category-overview";
+import { groupedCategories, isThin } from "@/lib/category-overview";
 import { CATEGORY_LABEL, type Category } from "@/lib/categories";
 import { ProviderCard } from "@/components/ProviderCard";
 import { SplitBar } from "@/components/SplitBar";
 import { Input } from "@/components/ui/input";
+import iHealth from "@/assets/icon-health.png";
+import iChildcare from "@/assets/icon-childcare.png";
+import iActivities from "@/assets/icon-activities.png";
+import iGear from "@/assets/icon-gear.png";
+import iHome from "@/assets/icon-home.png";
+import iFood from "@/assets/icon-food.png";
+import iOutings from "@/assets/icon-outings.png";
+
+const GROUP_ICON: Record<string, string> = { Health: iHealth, Childcare: iChildcare, Activities: iActivities, Gear: iGear, "Home & services": iHome, Food: iFood, "Out & about": iOutings };
 
 export const Route = createFileRoute("/_authenticated/_member/board")({
   head: () => ({ meta: [{ title: "Board — Parent Picks" }, { name: "description", content: "Search every recommendation your group has shared." }, { property: "og:title", content: "Board — Parent Picks" }, { property: "og:description", content: "Explore your village's parent recommendations." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
@@ -28,8 +37,6 @@ function Board() {
   const [q, setQ] = useState("");
   const results = useMemo(() => searchProviders(data, q, reviews).filter((p) => !isThin(p)), [data, q, reviews]);
   const groups = useMemo(() => groupedCategories(data), [data]);
-  const recs = data.filter(isRecommendation).length;
-  const catCount = groups.reduce((n, g) => n + g.cards.length, 0);
 
   return (
     <div>
@@ -54,13 +61,6 @@ function Board() {
         </section>
       ) : (
         <>
-          <section className="mt-6 rounded-2xl border-t-4 border-foreground bg-card p-5">
-            <div className="flex flex-wrap gap-x-10 gap-y-3">
-              <div><div className="font-display text-5xl text-mixed-ink">{recs}</div><div className="text-sm">recommendations</div></div>
-              <div><div className="font-display text-5xl">{catCount}</div><div className="text-sm">categories covered</div></div>
-            </div>
-            <p className="mt-3 text-xs text-muted-foreground">Counts places at least one parent spoke well of, mentioned by 2 or more parents.</p>
-          </section>
 
           {groups.map((g) => (
             <section key={g.name} className="mt-8">
@@ -68,9 +68,12 @@ function Board() {
               <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {g.cards.map((c) => (
                   <Link key={c.category} to="/c/$category" params={{ category: c.category }} className="kraft-card block min-w-0 p-4 transition hover:-translate-y-0.5">
-                    <div className="flex items-baseline justify-between gap-2">
-                      <h3 className="truncate text-xl">{label(c.category)}</h3>
-                      <span className="shrink-0 text-xs font-semibold text-muted-foreground">{c.count} {c.count === 1 ? "place" : "places"}</span>
+                    <div className="flex items-center gap-3">
+                      <img src={GROUP_ICON[g.name] ?? iOutings} alt="" loading="lazy" width={816} height={816} className="size-12 shrink-0 object-contain" />
+                      <div className="min-w-0">
+                        <h3 className="truncate text-xl">{label(c.category)}</h3>
+                        <span className="text-xs font-semibold text-muted-foreground">{c.count} {c.count === 1 ? "place" : "places"}</span>
+                      </div>
                     </div>
                     {c.top && <>
                       <p className="mt-3 text-xs font-bold uppercase tracking-wide text-muted-foreground">Top pick</p>
