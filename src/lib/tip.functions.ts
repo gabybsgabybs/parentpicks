@@ -96,7 +96,13 @@ export const createTipCheckout = createServerFn({ method: "POST" })
           {
             price_data: {
               currency: "usd",
-              product_data: { name: "Tip for Parent Picks" },
+              product_data: {
+                name: "Tip for Parent Picks",
+                // Stripe requires a tax code on the inline product. A tip is a
+                // voluntary contribution, not a sale of goods or services, so
+                // it is classified as a cash donation.
+                tax_code: "txcd_90000001",
+              },
               unit_amount: data.amountInCents,
             },
             quantity: 1,
@@ -109,6 +115,13 @@ export const createTipCheckout = createServerFn({ method: "POST" })
         // Surfaces as the product name in the payments dashboard.
         payment_intent_data: { description: "Tip for Parent Picks" },
         metadata: { userId: context.userId, kind: "tip" },
+        // Tips are collected in US dollars only; without this Stripe shows a
+        // currency picker with a converted (euro) amount preselected.
+        adaptive_pricing: { enabled: false },
+        // A tip is a voluntary contribution, not a sale, so it is coded as a
+        // cash donation. That code is ineligible for the account's default
+        // end-to-end compliance handling, so this session opts out of it.
+        managed_payments: { enabled: false },
       } as Stripe.Checkout.SessionCreateParams);
 
       return { clientSecret: session.client_secret ?? "" };
