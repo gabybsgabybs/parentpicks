@@ -36,6 +36,7 @@ const label = (c: string) => CATEGORY_LABEL[c as Category] ?? c;
 
 function Board() {
   const { group } = Route.useRouteContext();
+  const { tip } = Route.useSearch();
   const { data } = useSuspenseQuery(boardQuery(group.neighborhoodId));
   const { data: reviews } = useSuspenseQuery(reviewTextQuery(group.neighborhoodId));
   const [q, setQ] = useState("");
@@ -101,6 +102,8 @@ function Board() {
       )}
 
       <p className="mt-10 text-xs text-muted-foreground">Recommendations as shared by parents in the group. Summaries are written by AI and may contain mistakes. Not verified.</p>
+
+      <TipJar thanks={tip === "thanks"} />
     </div>
   );
 }
