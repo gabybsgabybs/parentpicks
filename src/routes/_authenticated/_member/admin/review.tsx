@@ -49,6 +49,7 @@ function Review() {
   const [tab, setTab] = useState<Status | "all">("all");
   const [search, setSearch] = useState("");
   const [filterCategory, setFilterCategory] = useState("all");
+  const [page, setPage] = useState(0);
   const merge = useServerFn(mergeProviders);
   const refresh = () => qc.invalidateQueries();
   const byId = new Map(data.providers.map((p) => [p.id, p]));
@@ -108,11 +109,11 @@ function Review() {
 
       <section>
         <div className="mb-4 grid gap-3 sm:grid-cols-[1fr_260px]">
-          <div className="relative"><Search className="pointer-events-none absolute left-3 top-3 size-5 text-muted-foreground" /><Input className="h-11 pl-10" aria-label="Search businesses" placeholder="Search businesses…" value={search} onChange={(e) => setSearch(e.target.value)} /></div>
-          <Select value={filterCategory} onValueChange={setFilterCategory}><SelectTrigger aria-label="Filter category" className="h-11 w-full"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">All categories</SelectItem>{CATEGORIES.map((c) => <SelectItem key={c} value={c}>{CATEGORY_LABEL[c]}</SelectItem>)}</SelectContent></Select>
+          <div className="relative"><Search className="pointer-events-none absolute left-3 top-3 size-5 text-muted-foreground" /><Input className="h-11 pl-10" aria-label="Search businesses" placeholder="Search businesses…" value={search} onChange={(e) => { setSearch(e.target.value); setPage(0); }} /></div>
+          <Select value={filterCategory} onValueChange={(v) => { setFilterCategory(v); setPage(0); }}><SelectTrigger aria-label="Filter category" className="h-11 w-full"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">All categories</SelectItem>{CATEGORIES.map((c) => <SelectItem key={c} value={c}>{CATEGORY_LABEL[c]}</SelectItem>)}</SelectContent></Select>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <Tabs className="min-w-0 max-w-full overflow-x-auto" value={tab} onValueChange={(v) => setTab(v as Status | "all")}>
+          <Tabs className="min-w-0 max-w-full overflow-x-auto" value={tab} onValueChange={(v) => { setTab(v as Status | "all"); setPage(0); }}>
             <TabsList className="h-11">
               <TabsTrigger value="all" className="px-3">All ({data.providers.length})</TabsTrigger>
               {(Object.keys(STATUS_LABEL) as Status[]).map((s) => (
@@ -125,8 +126,9 @@ function Review() {
         <p className="mt-2 text-sm text-muted-foreground">Parents only see published recommendations mentioned by at least {MIN_PARENTS} parents.</p>
         <div className="mt-4 space-y-4">
           {list.length === 0 && <p className="py-8 text-center text-muted-foreground">Nothing here.</p>}
-          {list.map((p) => <EditCard key={p.id} p={p} all={data.providers} onChange={refresh} onMerge={doMerge} />)}
+          {list.slice(page * 10, (page + 1) * 10).map((p) => <EditCard key={p.id} p={p} all={data.providers} onChange={refresh} onMerge={doMerge} />)}
         </div>
+        {list.length > 10 && <div className="mt-5 flex items-center justify-between gap-3"><Button variant="outline" disabled={page === 0} onClick={() => setPage(page - 1)}>Previous</Button><span className="text-sm text-muted-foreground">{page * 10 + 1}–{Math.min((page + 1) * 10, list.length)} of {list.length}</span><Button variant="outline" disabled={(page + 1) * 10 >= list.length} onClick={() => setPage(page + 1)}>Next</Button></div>}
       </section>
     </div>
   );
