@@ -4,7 +4,7 @@ import { loadStripe, type Stripe } from "@stripe/stripe-js";
 // Structurally identical to the server StripeEnv in stripe.server.ts.
 export type StripeEnv = "sandbox" | "live";
 
-const clientToken = import.meta.env.VITE_PAYMENTS_CLIENT_TOKEN;
+const clientToken = import.meta.env["VITE_PAYMENTS_CLIENT_TOKEN"];
 
 // Derive the environment from the token PREFIX, not its mere presence.
 // A missing or unrecognized token is a configuration error: the build shipped

@@ -26,8 +26,8 @@ export const Route = createFileRoute("/_authenticated/_member/board")({
     context.queryClient.ensureQueryData(boardQuery(context.group.neighborhoodId)),
     context.queryClient.ensureQueryData(reviewTextQuery(context.group.neighborhoodId)),
   ]),
-  validateSearch: (search: Record<string, unknown>): { tip?: string } => ({
-    tip: typeof search.tip === "string" ? search.tip : undefined,
+  validateSearch: (search: Record<string, unknown>): { tip?: string | undefined } => ({
+    tip: typeof search["tip"] === "string" ? search["tip"] : undefined,
   }),
   component: Board,
 });

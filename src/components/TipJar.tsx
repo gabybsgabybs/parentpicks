@@ -36,7 +36,7 @@ export function TipJar({ thanks = false }: { thanks?: boolean }) {
   const cents = picked === "custom" ? toCents(customInput) : picked;
 
   const checkoutOptions = useMemo(() => {
-    if (sessionCents === null) return null;
+    if (sessionCents === null || environment === null) return null;
     return {
       fetchClientSecret: async (): Promise<string> => {
         const result = await openTipCheckout({
