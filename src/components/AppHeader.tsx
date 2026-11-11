@@ -29,7 +29,7 @@ export function AppHeader() {
           <Link to="/board" className={link} onClick={() => setOpen(false)}>Board</Link>
           {group.role === "admin" && <>
             <Link to="/admin/upload" className={link} onClick={() => setOpen(false)}>Upload</Link>
-            <Link to="/admin/review" className={link} onClick={() => setOpen(false)}>Review</Link>
+            <Link to="/admin/review" className={link} onClick={() => setOpen(false)}>Admin central</Link>
             <Link to="/admin/members" className={link} onClick={() => setOpen(false)}>Members</Link>
           </>}
           <Button variant="ghost" size="sm" onClick={signOut}>Sign out</Button>
@@ -44,7 +44,7 @@ export function AppHeader() {
               <Link to="/board" className={link} onClick={() => setOpen(false)}>Board</Link>
           {group.role === "admin" && <>
             <Link to="/admin/upload" className={link} onClick={() => setOpen(false)}>Upload</Link>
-            <Link to="/admin/review" className={link} onClick={() => setOpen(false)}>Review</Link>
+            <Link to="/admin/review" className={link} onClick={() => setOpen(false)}>Admin central</Link>
             <Link to="/admin/members" className={link} onClick={() => setOpen(false)}>Members</Link>
           </>}
           <Button variant="ghost" size="sm" onClick={signOut}>Sign out</Button>

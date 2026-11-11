@@ -3,7 +3,7 @@ import { queryOptions, useQueryClient, useSuspenseQuery } from "@tanstack/react-
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
-import { AlertTriangle, Flag } from "lucide-react";
+import { AlertTriangle, Flag, Search, EyeOff, MessageSquare } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { AdminOnly } from "@/components/AdminOnly";
 import { SentimentBar } from "@/components/SentimentBar";
@@ -16,6 +16,7 @@ import { CATEGORIES, CATEGORY_LABEL, MIN_PARENTS, cleanUrl, yearRange } from "@/
 import type { Provider } from "@/lib/board";
 import { lookupContacts, mergeProviders, splitProvider } from "@/lib/pipeline.functions";
 import { websiteOnly } from "@/lib/categories";
+import { AdminReviews } from "@/components/AdminReviews";
 
 const reviewQuery = (nb: string) => queryOptions({
   queryKey: ["review", nb],
@@ -25,12 +26,15 @@ const reviewQuery = (nb: string) => queryOptions({
       supabase.from("match_suggestions").select("*").eq("neighborhood_id", nb).eq("status", "open"),
       supabase.from("flags").select("*").eq("neighborhood_id", nb).eq("resolved", false).order("created_at", { ascending: false }),
     ]);
+    if (p.error) throw p.error;
+    if (s.error) throw s.error;
+    if (f.error) throw f.error;
     return { providers: (p.data ?? []) as Provider[], suggestions: s.data ?? [], flags: f.data ?? [] };
   },
 });
 
 export const Route = createFileRoute("/_authenticated/_member/admin/review")({
-  head: () => ({ meta: [{ title: "Review — Parent Picks" }, { name: "description", content: "Review, publish and tidy recommendations." }, { property: "og:title", content: "Review — Parent Picks" }, { property: "og:description", content: "Review your group's recommendations before publishing." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
+  head: () => ({ meta: [{ title: "Admin central — Parent Picks" }, { name: "description", content: "Manage businesses, categories, summaries and anonymous parent reviews." }, { property: "og:title", content: "Admin central — Parent Picks" }, { property: "og:description", content: "Manage your group's recommendations and parent reviews." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: () => <AdminOnly><Review /></AdminOnly>,
 });
 
@@ -41,11 +45,13 @@ function Review() {
   const { group } = Route.useRouteContext();
   const qc = useQueryClient();
   const { data } = useSuspenseQuery(reviewQuery(group.neighborhoodId));
-  const [tab, setTab] = useState<Status>("needs_review");
+  const [tab, setTab] = useState<Status | "all">("all");
+  const [search, setSearch] = useState("");
+  const [filterCategory, setFilterCategory] = useState("all");
   const merge = useServerFn(mergeProviders);
   const refresh = () => qc.invalidateQueries();
   const byId = new Map(data.providers.map((p) => [p.id, p]));
-  const list = data.providers.filter((p) => p.status === tab);
+  const list = data.providers.filter((p) => (tab === "all" || p.status === tab) && (filterCategory === "all" || p.category === filterCategory) && [p.name, ...p.aliases, p.summary, p.location ?? ""].join(" ").toLowerCase().includes(search.trim().toLowerCase()));
 
   async function doMerge(keepId: string, mergeId: string) {
     try { await merge({ data: { keepId, mergeId } }); toast.success("Merged"); refresh(); } catch (e) { toast.error((e as Error).message); }
@@ -53,13 +59,14 @@ function Review() {
   async function publishAll() {
     const ids = list.filter((p) => !p.self_promo_flag && p.parent_count >= MIN_PARENTS).map((p) => p.id);
     if (!ids.length) return;
-    await supabase.from("providers").update({ status: "published" }).in("id", ids);
+    const { error } = await supabase.from("providers").update({ status: "published" }).in("id", ids);
+    if (error) { toast.error(error.message); return; }
     toast.success(`Published ${ids.length}`); refresh();
   }
 
   return (
     <div className="space-y-8">
-      <h1 className="font-display text-4xl font-extrabold">Review</h1>
+      <h1 className="font-display text-4xl font-extrabold">Admin central</h1>
 
       {data.flags.length > 0 && (
         <section>
@@ -99,11 +106,16 @@ function Review() {
       )}
 
       <section>
+        <div className="mb-4 grid gap-3 sm:grid-cols-[1fr_260px]">
+          <div className="relative"><Search className="pointer-events-none absolute left-3 top-3 size-5 text-muted-foreground" /><Input className="h-11 pl-10" aria-label="Search businesses" placeholder="Search businesses…" value={search} onChange={(e) => setSearch(e.target.value)} /></div>
+          <Select value={filterCategory} onValueChange={setFilterCategory}><SelectTrigger aria-label="Filter category" className="h-11 w-full"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">All categories</SelectItem>{CATEGORIES.map((c) => <SelectItem key={c} value={c}>{CATEGORY_LABEL[c]}</SelectItem>)}</SelectContent></Select>
+        </div>
         <div className="flex flex-wrap items-center gap-3">
-          <Tabs value={tab} onValueChange={(v) => setTab(v as Status)}>
+          <Tabs className="min-w-0 max-w-full overflow-x-auto" value={tab} onValueChange={(v) => setTab(v as Status | "all")}>
             <TabsList className="h-11">
+              <TabsTrigger value="all" className="px-3">All ({data.providers.length})</TabsTrigger>
               {(Object.keys(STATUS_LABEL) as Status[]).map((s) => (
-                <TabsTrigger key={s} value={s} className="px-4">{STATUS_LABEL[s]} ({data.providers.filter((p) => p.status === s).length})</TabsTrigger>
+                <TabsTrigger key={s} value={s} className="px-3">{STATUS_LABEL[s]} ({data.providers.filter((p) => p.status === s).length})</TabsTrigger>
               ))}
             </TabsList>
           </Tabs>
@@ -141,20 +153,28 @@ function EditCard({ p, all, onChange, onMerge }: { p: Provider; all: Provider[];
   const [address, setAddress] = useState(p.address ?? "");
   const [booking, setBooking] = useState(p.booking_url ?? "");
   const [looking, setLooking] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [showReviews, setShowReviews] = useState(false);
   const split = useServerFn(splitProvider);
   const lookup = useServerFn(lookupContacts);
   const webOnly = websiteOnly(category);
   const contactDirty = website !== (p.website ?? "") || phone !== (p.phone ?? "") || address !== (p.address ?? "") || booking !== (p.booking_url ?? "");
   const dirty = name !== p.name || category !== p.category || summary !== p.summary || contactDirty;
   async function save(extra: Partial<Provider> = {}) {
+    if (!name.trim()) { toast.error("Please enter a business name"); return; }
+    setSaving(true);
+    try {
     const { error } = await supabase.from("providers").update({ name, category: category as never, summary,
       website: cleanUrl(website), phone: webOnly ? null : phone.trim() || null, address: webOnly ? null : address.trim() || null,
       booking_url: webOnly ? null : cleanUrl(booking), ...extra } as never).eq("id", p.id);
     if (error) { toast.error(error.message); return; }
     toast.success(extra.status ? `Moved to ${STATUS_LABEL[extra.status as Status]}` : "Saved"); onChange();
+    } catch (e) { toast.error(e instanceof Error ? e.message : "Could not save changes"); }
+    finally { setSaving(false); }
   }
   return (
-    <div className="rounded-2xl border border-border bg-popover p-4">
+    <div className="rounded-lg border border-border bg-popover p-4" data-provider-id={p.id}>
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground"><span>{STATUS_LABEL[p.status as Status] ?? p.status}</span><Link to="/p/$id" params={{ id: p.id }} className="underline">View recommendation</Link></div>
       {p.self_promo_flag && <p className="mb-3 flex items-center gap-2 rounded-lg bg-marigold/25 px-3 py-2 text-sm font-medium"><AlertTriangle className="size-4" /> Possible self-promotion: a parent may have recommended their own business.</p>}
       <div className="grid gap-3 md:grid-cols-[1fr_220px]">
         <Input value={name} onChange={(e) => setName(e.target.value)} className="h-11 font-display text-lg font-bold" aria-label="Name" />
@@ -193,27 +213,29 @@ function EditCard({ p, all, onChange, onMerge }: { p: Provider; all: Provider[];
           <span className="font-semibold">Other names:</span>
           {p.aliases.map((a) => (
             <span key={a} className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-1">{a}
-              <button className="text-xs underline" title="Split this name into its own recommendation" onClick={async () => {
+              <Button size="sm" variant="link" className="h-auto p-0 text-xs" title="Split this name into its own recommendation" onClick={async () => {
                 if (!confirm(`Split "${a}" into its own recommendation?`)) return;
                 try { await split({ data: { providerId: p.id, alias: a } }); toast.success("Split"); onChange(); } catch (e) { toast.error((e as Error).message); }
-              }}>split</button>
+              }}>split</Button>
             </span>
           ))}
         </div>
       )}
       <div className="mt-4 flex flex-wrap gap-2">
-        {dirty && <Button variant="outline" onClick={() => save()}>Save changes</Button>}
-        {p.status !== "published" && <Button onClick={() => save({ status: "published" })}>Publish</Button>}
-        {p.status !== "hidden" && <Button variant="ghost" onClick={() => save({ status: "hidden" })}>Hide</Button>}
-        {p.status === "hidden" && <Button variant="ghost" onClick={() => save({ status: "needs_review" })}>Back to review</Button>}
-        <div className="ml-auto flex gap-2">
+        {dirty && <Button variant="outline" disabled={saving} onClick={() => save()}>Save changes</Button>}
+        {p.status !== "published" && <Button disabled={saving} onClick={() => save({ status: "published" })}>Publish</Button>}
+        {p.status !== "hidden" && <Button variant="ghost" disabled={saving} onClick={() => save({ status: "hidden" })}><EyeOff className="size-4" />Hide business</Button>}
+        {p.status === "hidden" && <Button variant="ghost" disabled={saving} onClick={() => save({ status: "needs_review" })}>Back to review</Button>}
+        <Button variant="outline" aria-expanded={showReviews} onClick={() => setShowReviews(!showReviews)}><MessageSquare className="size-4" />{showReviews ? "Close reviews" : "Manage reviews"}</Button>
+        <div className="ml-auto flex w-full gap-2 sm:w-auto">
           <Select value={mergeInto} onValueChange={setMergeInto}>
-            <SelectTrigger className="h-10 w-52" aria-label="Merge into"><SelectValue placeholder="Merge into…" /></SelectTrigger>
+            <SelectTrigger className="h-10 min-w-0 flex-1 sm:w-52" aria-label="Merge into"><SelectValue placeholder="Merge into…" /></SelectTrigger>
             <SelectContent>{all.filter((o) => o.id !== p.id).map((o) => <SelectItem key={o.id} value={o.id}>{o.name}</SelectItem>)}</SelectContent>
           </Select>
           <Button variant="outline" disabled={!mergeInto} onClick={() => onMerge(mergeInto, p.id)}>Merge</Button>
         </div>
       </div>
+      {showReviews && <AdminReviews neighborhoodId={p.neighborhood_id} providerId={p.id} />}
     </div>
   );
 }
