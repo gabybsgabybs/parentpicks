@@ -9,6 +9,6 @@
 - [x] No product catalog or subscriptions — tips are one-time, amount chosen at checkout.
 
 # Admin central
-- [ ] Search published, pending and hidden businesses and edit categories and summaries.
-- [ ] Edit or delete anonymous reviews with admin-only access and automatic count updates.
-- [ ] Verify editing, hiding/restoring and review removal on desktop and mobile.
+- [x] Search published, pending and hidden businesses and edit categories and summaries.
+- [x] Edit or delete anonymous reviews with admin-only access and automatic count updates.
+- [x] Verify editing, hiding/restoring and review removal on desktop and mobile.
