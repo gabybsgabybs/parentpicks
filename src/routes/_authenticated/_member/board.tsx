@@ -8,6 +8,7 @@ import { groupedCategories, isThin } from "@/lib/category-overview";
 import { CATEGORY_LABEL, type Category } from "@/lib/categories";
 import { ProviderCard } from "@/components/ProviderCard";
 import { SplitBar } from "@/components/SplitBar";
+import { TipJar } from "@/components/TipJar";
 import { Input } from "@/components/ui/input";
 import iHealth from "@/assets/icon-health.png";
 import iChildcare from "@/assets/icon-childcare.png";

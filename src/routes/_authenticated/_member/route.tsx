@@ -1,6 +1,7 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { myGroupQuery } from "@/lib/membership";
 import { AppHeader } from "@/components/AppHeader";
+import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 
 export const Route = createFileRoute("/_authenticated/_member")({
   beforeLoad: async ({ context }) => {
