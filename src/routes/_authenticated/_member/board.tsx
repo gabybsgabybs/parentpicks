@@ -69,7 +69,7 @@ function Board() {
                 {g.cards.map((c) => (
                   <Link key={c.category} to="/c/$category" params={{ category: c.category }} className="kraft-card block min-w-0 p-4 transition hover:-translate-y-0.5">
                     <div className="flex items-center gap-3">
-                      <img src={GROUP_ICON[g.name] ?? iOutings} alt="" loading="lazy" width={816} height={816} className="size-12 shrink-0 object-contain" />
+                      <img src={GROUP_ICON[g.name] ?? iOutings} alt="" loading="lazy" width={816} height={816} className="size-14 shrink-0 scale-150 object-contain" />
                       <div className="min-w-0">
                         <h3 className="truncate text-xl">{label(c.category)}</h3>
                         <span className="text-xs font-semibold text-muted-foreground">{c.count} {c.count === 1 ? "place" : "places"}</span>
