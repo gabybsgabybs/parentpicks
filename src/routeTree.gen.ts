@@ -21,6 +21,7 @@ import { Route as AuthenticatedMemberBoardRouteImport } from './routes/_authenti
 import { Route as AuthenticatedMemberAdminMembersRouteImport } from './routes/_authenticated/_member/admin/members'
 import { Route as AuthenticatedMemberAdminReviewRouteImport } from './routes/_authenticated/_member/admin/review'
 import { Route as AuthenticatedMemberAdminUploadRouteImport } from './routes/_authenticated/_member/admin/upload'
+import { Route as AuthenticatedMemberCCategoryRouteImport } from './routes/_authenticated/_member/c/$category'
 import { Route as AuthenticatedMemberPIdRouteImport } from './routes/_authenticated/_member/p/$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -87,6 +88,12 @@ const AuthenticatedMemberAdminUploadRoute =
     path: '/admin/upload',
     getParentRoute: () => AuthenticatedMemberRouteRoute,
   } as any)
+const AuthenticatedMemberCCategoryRoute =
+  AuthenticatedMemberCCategoryRouteImport.update({
+    id: '/c/$category',
+    path: '/c/$category',
+    getParentRoute: () => AuthenticatedMemberRouteRoute,
+  } as any)
 const AuthenticatedMemberPIdRoute = AuthenticatedMemberPIdRouteImport.update({
   id: '/p/$id',
   path: '/p/$id',
@@ -104,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/admin/members': typeof AuthenticatedMemberAdminMembersRoute
   '/admin/review': typeof AuthenticatedMemberAdminReviewRoute
   '/admin/upload': typeof AuthenticatedMemberAdminUploadRoute
+  '/c/$category': typeof AuthenticatedMemberCCategoryRoute
   '/p/$id': typeof AuthenticatedMemberPIdRoute
 }
 export interface FileRoutesByTo {
@@ -117,6 +125,7 @@ export interface FileRoutesByTo {
   '/admin/members': typeof AuthenticatedMemberAdminMembersRoute
   '/admin/review': typeof AuthenticatedMemberAdminReviewRoute
   '/admin/upload': typeof AuthenticatedMemberAdminUploadRoute
+  '/c/$category': typeof AuthenticatedMemberCCategoryRoute
   '/p/$id': typeof AuthenticatedMemberPIdRoute
 }
 export interface FileRoutesById {
@@ -133,6 +142,7 @@ export interface FileRoutesById {
   '/_authenticated/_member/admin/members': typeof AuthenticatedMemberAdminMembersRoute
   '/_authenticated/_member/admin/review': typeof AuthenticatedMemberAdminReviewRoute
   '/_authenticated/_member/admin/upload': typeof AuthenticatedMemberAdminUploadRoute
+  '/_authenticated/_member/c/$category': typeof AuthenticatedMemberCCategoryRoute
   '/_authenticated/_member/p/$id': typeof AuthenticatedMemberPIdRoute
 }
 export interface FileRouteTypes {
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/admin/members'
     | '/admin/review'
     | '/admin/upload'
+    | '/c/$category'
     | '/p/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/admin/members'
     | '/admin/review'
     | '/admin/upload'
+    | '/c/$category'
     | '/p/$id'
   id:
     | '__root__'
@@ -176,6 +188,7 @@ export interface FileRouteTypes {
     | '/_authenticated/_member/admin/members'
     | '/_authenticated/_member/admin/review'
     | '/_authenticated/_member/admin/upload'
+    | '/_authenticated/_member/c/$category'
     | '/_authenticated/_member/p/$id'
   fileRoutesById: FileRoutesById
 }
@@ -274,6 +287,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMemberAdminUploadRouteImport
       parentRoute: typeof AuthenticatedMemberRouteRoute
     }
+    '/_authenticated/_member/c/$category': {
+      id: '/_authenticated/_member/c/$category'
+      path: '/c/$category'
+      fullPath: '/c/$category'
+      preLoaderRoute: typeof AuthenticatedMemberCCategoryRouteImport
+      parentRoute: typeof AuthenticatedMemberRouteRoute
+    }
     '/_authenticated/_member/p/$id': {
       id: '/_authenticated/_member/p/$id'
       path: '/p/$id'
@@ -289,6 +309,7 @@ interface AuthenticatedMemberRouteRouteChildren {
   AuthenticatedMemberAdminMembersRoute: typeof AuthenticatedMemberAdminMembersRoute
   AuthenticatedMemberAdminReviewRoute: typeof AuthenticatedMemberAdminReviewRoute
   AuthenticatedMemberAdminUploadRoute: typeof AuthenticatedMemberAdminUploadRoute
+  AuthenticatedMemberCCategoryRoute: typeof AuthenticatedMemberCCategoryRoute
   AuthenticatedMemberPIdRoute: typeof AuthenticatedMemberPIdRoute
 }
 
@@ -298,6 +319,7 @@ const AuthenticatedMemberRouteRouteChildren: AuthenticatedMemberRouteRouteChildr
     AuthenticatedMemberAdminMembersRoute: AuthenticatedMemberAdminMembersRoute,
     AuthenticatedMemberAdminReviewRoute: AuthenticatedMemberAdminReviewRoute,
     AuthenticatedMemberAdminUploadRoute: AuthenticatedMemberAdminUploadRoute,
+    AuthenticatedMemberCCategoryRoute: AuthenticatedMemberCCategoryRoute,
     AuthenticatedMemberPIdRoute: AuthenticatedMemberPIdRoute,
   }
 

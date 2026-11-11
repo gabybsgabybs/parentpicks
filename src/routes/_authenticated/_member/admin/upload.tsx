@@ -13,6 +13,7 @@ import { finalizeUpload, lookupContacts, processChunk, startUpload } from "@/lib
 
 export const Route = createFileRoute("/_authenticated/_member/admin/upload")({
   head: () => ({ meta: [{ title: "Upload chat — Parent Picks" }, { name: "description", content: "Upload a WhatsApp chat export." }, { property: "og:title", content: "Upload chat — Parent Picks" }, { property: "og:description", content: "Organize your group's WhatsApp recommendations." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
+  validateSearch: (s: Record<string, unknown>): { item?: string } => (typeof s["item"] === "string" && s["item"] ? { item: s["item"].slice(0, 120) } : {}),
   component: () => <AdminOnly><Upload /></AdminOnly>,
 });
 
@@ -20,6 +21,7 @@ const CHUNK = 80;
 
 function Upload() {
   const { group } = Route.useRouteContext();
+  const { item } = Route.useSearch();
   const announce = `Hi everyone! 👋 We're setting up Parent Picks — a private board that collects the recommendations shared in this group (pediatricians, dentists, classes, shops and more) so they're easy to search.
 
 • Only members of this group can see it (sign in with your email + the invite code in the group description).
@@ -71,6 +73,7 @@ Reply here if you have questions or concerns before we upload the chat.`;
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <h1 className="font-display text-4xl font-extrabold">Upload a chat</h1>
+      {item && <p className="rounded-lg border border-border bg-card px-3 py-2 text-sm">Adding your take on <b>{item}</b>: share it in the WhatsApp group, then upload the latest chat here.</p>}
 
       <section className="rounded-2xl border border-border bg-popover p-5">
         <h2 className="font-display text-xl font-extrabold">1. Tell the group first</h2>

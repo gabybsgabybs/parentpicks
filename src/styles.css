@@ -76,6 +76,7 @@
   --color-positive: var(--positive);
   --color-negative: var(--negative);
   --color-mixed: var(--mixed);
+  --color-mixed-ink: var(--mixed-ink);
   --font-display: "Instrument Serif", ui-serif, Georgia, serif;
   --color-meadow: var(--meadow);
   --color-sky: var(--sky);
@@ -111,6 +112,7 @@
   --positive: oklch(0.52 0.09 160);
   --negative: oklch(0.55 0.17 30);
   --mixed: oklch(0.7 0.13 70);
+  --mixed-ink: oklch(0.48 0.1 65);
   --shadow-card: 0 1px 0 oklch(0.32 0.04 50 / 8%), 0 10px 24px -14px oklch(0.32 0.04 50 / 35%);
   --chart-1: oklch(0.52 0.09 160);
   --chart-2: oklch(0.8 0.15 80);
@@ -148,4 +150,13 @@
 
 @utility village-fade {
   mask-image: radial-gradient(ellipse 68% 65% at 50% 50%, black 42%, transparent 74%);
+}
+
+@utility village-fade-left {
+  mask-image: linear-gradient(to right, transparent 0%, black 35%), radial-gradient(ellipse 80% 80% at 60% 50%, black 50%, transparent 80%);
+  mask-composite: intersect;
+}
+@layer base {
+  a:focus-visible, button:focus-visible, [role="button"]:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+  html, body { overflow-x: hidden; }
 }

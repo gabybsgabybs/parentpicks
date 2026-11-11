@@ -3,9 +3,10 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { CATEGORY_LABEL, isOlder, yearRange, type Category } from "@/lib/categories";
+import { CATEGORY_LABEL, isOlder, type Category } from "@/lib/categories";
 import type { Provider } from "@/lib/board";
-import { SentimentBar } from "@/components/SentimentBar";
+import { SplitBar } from "@/components/SplitBar";
+import { cleanQuote } from "@/lib/category-overview";
 import { ContactLinks, hasContact } from "@/components/ContactLinks";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -34,43 +35,57 @@ function Detail() {
   const { id } = Route.useParams();
   const { data } = useSuspenseQuery(detailQuery(id));
   const p = data.p;
+  const reviews = data.mentions.filter((m) => !m.self_promo).flatMap((m) => m.paraphrase.split(/'\s*;\s*'/).map((t, i) => ({ ...m, id: `${m.id}-${i}`, text: cleanQuote(t) }))).filter((m) => m.text);
   if (!p) return <div className="py-20 text-center">This recommendation isn't available. <Link to="/board" className="underline">Back to the board</Link></div>;
   return (
     <div className="mx-auto max-w-2xl">
       <Link to="/board" className="text-sm font-medium underline-offset-4 hover:underline">← Back to the board</Link>
       <article className="kraft-card mt-3 p-6">
-        <div className="text-xs font-bold uppercase tracking-wide text-foreground/60">{CATEGORY_LABEL[p.category as Category]}{p.location ? ` · ${p.location}` : ""}</div>
+        <Link to="/c/$category" params={{ category: p.category }} className="text-xs font-bold uppercase tracking-wide text-foreground/70 hover:underline">{CATEGORY_LABEL[p.category as Category] ?? p.category}</Link>
         <h1 className="mt-1 font-display text-4xl font-extrabold leading-tight">{p.name}</h1>
         {isOlder(p.last_mention) && <span className="mt-2 inline-block rounded-full bg-background/70 px-2 py-0.5 text-xs font-semibold">Older recommendations</span>}
-        <p className="mt-2"><b>{p.parent_count} parents</b> mentioned this · {yearRange(p.first_mention, p.last_mention)}</p>
-        <SentimentBar p={p} className="mt-3" />
+        <p className="mt-2"><b>{p.parent_count} parents</b> mentioned this</p>
+        <SplitBar p={p} labels className="mt-3" />
         <p className="mt-4 text-lg leading-relaxed">{p.summary}</p>
-        {hasContact(p) && (
+        {(hasContact(p) || p.location) && (
           <div className="mt-5">
             <ContactLinks p={p} />
-            {p.address && <p className="mt-2 text-sm text-foreground/70">{p.address}</p>}
-            <p className="mt-2 text-xs text-foreground/60">Contact details found online by AI. Please double-check before booking.</p>
+            <div className="mt-3 flex flex-wrap items-start gap-3">
+              <div className="space-y-0.5 text-sm">
+                {p.phone && <p>{p.phone}</p>}
+                {p.address && <p>{p.address}</p>}
+                {p.location && <p className="text-foreground/70">{p.location}</p>}
+              </div>
+              {p.contact_unverified && <span className="rounded-full border border-mixed bg-mixed/20 px-2.5 py-1 text-xs font-semibold text-foreground">Contact details unverified — call before relying on them</span>}
+            </div>
+            <p className="mt-2 text-xs text-foreground/70">Contact details found online by AI. Please double-check before booking.</p>
           </div>
         )}
         {p.aliases.length > 0 && <p className="mt-4 text-sm"><span className="font-semibold">Also called:</span> {p.aliases.join(", ")}</p>}
       </article>
       <p className="mt-3 text-xs text-muted-foreground">Recommendations as shared by parents in the group. Summaries are written by AI and may contain mistakes. Not verified.</p>
 
-      <div className="mt-8 flex items-center">
-        <h2 className="font-display text-2xl font-extrabold">What parents said</h2>
+      <div className="mt-8 flex flex-wrap items-center gap-2">
+        <h2 className="mr-auto font-display text-2xl">What parents said</h2>
+        <Button asChild><Link to="/admin/upload" search={{ item: p.name }}>Add your take</Link></Button>
         <FlagButton provider={p} />
       </div>
-      <ul className="mt-3 space-y-2">
-        {data.mentions.filter((m) => !m.self_promo).map((m) => (
-          <li key={m.id} className="rounded-xl border border-border bg-popover p-4">
-            <div className="flex items-center gap-2 text-sm">
-              <b>A parent</b><span className="text-muted-foreground">· {fmtMonth(m.mentioned_at)}</span>
-              <span className={`ml-auto rounded-full px-2 py-0.5 text-xs font-semibold ${tone[m.sentiment]}`}>{m.sentiment}</span>
-            </div>
-            <p className="mt-1.5">{m.paraphrase}</p>
-          </li>
-        ))}
-      </ul>
+      {reviews.length === 0 ? (
+        <div className="mt-4 rounded-xl border border-dashed border-border p-6 text-center">
+          <p>No reviews yet — be the first</p>
+          <Button asChild variant="outline" className="mt-3"><Link to="/admin/upload" search={{ item: p.name }}>Add your take</Link></Button>
+        </div>
+      ) : (
+        <ul className="mt-3 space-y-3">
+          {reviews.map((m) => (
+            <li key={m.id} className="relative rounded-xl border border-border bg-popover p-4 pl-12">
+              <span aria-hidden className="absolute left-3 top-1 font-display text-5xl leading-none text-primary">“</span>
+              <p className="text-[17px] leading-relaxed">{m.text}</p>
+              <p className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">A parent · {fmtMonth(m.mentioned_at)}<span className={`rounded-full px-2 py-0.5 font-semibold ${tone[m.sentiment]}`}>{m.sentiment}</span></p>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

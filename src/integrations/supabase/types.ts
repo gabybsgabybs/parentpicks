@@ -267,6 +267,7 @@ export type Database = {
           booking_url: string | null
           category: string
           contact_checked_at: string | null
+          contact_unverified: boolean
           created_at: string
           first_mention: string | null
           id: string
@@ -291,6 +292,7 @@ export type Database = {
           booking_url?: string | null
           category?: string
           contact_checked_at?: string | null
+          contact_unverified?: boolean
           created_at?: string
           first_mention?: string | null
           id?: string
@@ -315,6 +317,7 @@ export type Database = {
           booking_url?: string | null
           category?: string
           contact_checked_at?: string | null
+          contact_unverified?: boolean
           created_at?: string
           first_mention?: string | null
           id?: string
