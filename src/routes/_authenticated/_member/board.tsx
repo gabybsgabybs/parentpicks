@@ -8,6 +8,7 @@ import { groupedCategories, isThin } from "@/lib/category-overview";
 import { CATEGORY_LABEL, type Category } from "@/lib/categories";
 import { ProviderCard } from "@/components/ProviderCard";
 import { SplitBar } from "@/components/SplitBar";
+import { TipJar } from "@/components/TipJar";
 import { Input } from "@/components/ui/input";
 import iHealth from "@/assets/icon-health.png";
 import iChildcare from "@/assets/icon-childcare.png";
@@ -25,6 +26,9 @@ export const Route = createFileRoute("/_authenticated/_member/board")({
     context.queryClient.ensureQueryData(boardQuery(context.group.neighborhoodId)),
     context.queryClient.ensureQueryData(reviewTextQuery(context.group.neighborhoodId)),
   ]),
+  validateSearch: (search: Record<string, unknown>): { tip?: string | undefined } => ({
+    tip: typeof search["tip"] === "string" ? search["tip"] : undefined,
+  }),
   component: Board,
 });
 
@@ -32,6 +36,7 @@ const label = (c: string) => CATEGORY_LABEL[c as Category] ?? c;
 
 function Board() {
   const { group } = Route.useRouteContext();
+  const { tip } = Route.useSearch();
   const { data } = useSuspenseQuery(boardQuery(group.neighborhoodId));
   const { data: reviews } = useSuspenseQuery(reviewTextQuery(group.neighborhoodId));
   const [q, setQ] = useState("");
@@ -97,6 +102,8 @@ function Board() {
       )}
 
       <p className="mt-10 text-xs text-muted-foreground">Recommendations as shared by parents in the group. Summaries are written by AI and may contain mistakes. Not verified.</p>
+
+      <TipJar thanks={tip === "thanks"} />
     </div>
   );
 }
