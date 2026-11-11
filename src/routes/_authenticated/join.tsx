@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { myGroupQuery } from "@/lib/membership";
 
 export const Route = createFileRoute("/_authenticated/join")({
-  head: () => ({ meta: [{ title: "Join your group — Parent Picks" }, { name: "description", content: "Enter your neighborhood's invite code." }] }),
+  head: () => ({ meta: [{ title: "Join your group — Parent Picks" }, { name: "description", content: "Enter your neighborhood's invite code." }, { property: "og:title", content: "Join your group — Parent Picks" }, { property: "og:description", content: "Join your neighborhood's private recommendations board." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: JoinPage,
 });
 
