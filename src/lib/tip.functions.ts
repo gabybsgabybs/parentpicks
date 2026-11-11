@@ -96,7 +96,13 @@ export const createTipCheckout = createServerFn({ method: "POST" })
           {
             price_data: {
               currency: "usd",
-              product_data: { name: "Tip for Parent Picks" },
+              product_data: {
+                name: "Tip for Parent Picks",
+                // Stripe requires a tax code on the inline product. A tip is a
+                // voluntary contribution, not a sale of goods or services, so
+                // it is classified as a cash donation.
+                tax_code: "txcd_90000001",
+              },
               unit_amount: data.amountInCents,
             },
             quantity: 1,
