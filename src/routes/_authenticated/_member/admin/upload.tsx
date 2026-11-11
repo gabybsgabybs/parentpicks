@@ -12,7 +12,7 @@ import { parseWhatsApp, readChatFile } from "@/lib/whatsapp";
 import { finalizeUpload, lookupContacts, processChunk, startUpload } from "@/lib/pipeline.functions";
 
 export const Route = createFileRoute("/_authenticated/_member/admin/upload")({
-  head: () => ({ meta: [{ title: "Upload chat — Parent Picks" }, { name: "description", content: "Upload a WhatsApp chat export." }] }),
+  head: () => ({ meta: [{ title: "Upload chat — Parent Picks" }, { name: "description", content: "Upload a WhatsApp chat export." }, { property: "og:title", content: "Upload chat — Parent Picks" }, { property: "og:description", content: "Organize your group's WhatsApp recommendations." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: () => <AdminOnly><Upload /></AdminOnly>,
 });
 

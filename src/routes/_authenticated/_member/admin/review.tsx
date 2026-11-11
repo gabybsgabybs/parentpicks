@@ -30,7 +30,7 @@ const reviewQuery = (nb: string) => queryOptions({
 });
 
 export const Route = createFileRoute("/_authenticated/_member/admin/review")({
-  head: () => ({ meta: [{ title: "Review — Parent Picks" }, { name: "description", content: "Review, publish and tidy recommendations." }] }),
+  head: () => ({ meta: [{ title: "Review — Parent Picks" }, { name: "description", content: "Review, publish and tidy recommendations." }, { property: "og:title", content: "Review — Parent Picks" }, { property: "og:description", content: "Review your group's recommendations before publishing." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: () => <AdminOnly><Review /></AdminOnly>,
 });
 

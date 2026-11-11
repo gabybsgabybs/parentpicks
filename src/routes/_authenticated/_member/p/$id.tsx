@@ -22,7 +22,7 @@ const detailQuery = (id: string) => queryOptions({
 });
 
 export const Route = createFileRoute("/_authenticated/_member/p/$id")({
-  head: () => ({ meta: [{ title: "Recommendation — Parent Picks" }, { name: "description", content: "What parents in the group said." }] }),
+  head: () => ({ meta: [{ title: "Recommendation — Parent Picks" }, { name: "description", content: "What parents in the group said." }, { property: "og:title", content: "Recommendation — Parent Picks" }, { property: "og:description", content: "Parent experiences and contact details from your group's board." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   loader: ({ context, params }) => context.queryClient.ensureQueryData(detailQuery(params.id)),
   component: Detail,
 });

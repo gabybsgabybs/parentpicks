@@ -12,7 +12,7 @@ const membersQuery = (nb: string) => queryOptions({
 });
 
 export const Route = createFileRoute("/_authenticated/_member/admin/members")({
-  head: () => ({ meta: [{ title: "Members — Parent Picks" }, { name: "description", content: "Manage the invite code and members." }] }),
+  head: () => ({ meta: [{ title: "Members — Parent Picks" }, { name: "description", content: "Manage the invite code and members." }, { property: "og:title", content: "Members — Parent Picks" }, { property: "og:description", content: "Manage membership in your Parent Picks neighborhood." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: () => <AdminOnly><Members /></AdminOnly>,
 });
 
