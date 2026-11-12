@@ -33,7 +33,7 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: "Parent Picks — your parents' group recommendations, organized" },
       { name: "description", content: "Turn years of WhatsApp recommendations into a searchable board of pediatricians, dentists, classes and more." },
-      { property: "og:title", content: "Parent Picks" },
+      { property: "og:title", content: "Parent Picks — your parents' group recommendations, organized into one board" },
       { property: "og:description", content: "Turn years of WhatsApp recommendations into a searchable board." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
