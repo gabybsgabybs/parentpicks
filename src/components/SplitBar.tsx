@@ -16,8 +16,10 @@ export function SplitBar({ p, labels = false, className }: { p: { positive: numb
       {labels && (
         <div className="mt-1 flex justify-between text-xs font-semibold">
           <span className="text-positive">{p.positive} positive</span>
+          <span className="flex gap-3">
           {mixed > 0 && <span className="text-muted-foreground">{mixed} mixed</span>}
           <span className={cn(p.negative ? "text-mixed-ink" : "text-muted-foreground")}>{p.negative} negative</span>
+          </span>
         </div>
       )}
     </div>
