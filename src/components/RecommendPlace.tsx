@@ -35,7 +35,7 @@ export function RecommendPlace() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild><Button variant="outline" className="h-11 rounded-xl bg-card px-4"><Plus className="size-4" /> Recommend a place</Button></DialogTrigger>
+      <DialogTrigger asChild><Button variant="outline" className="h-11 w-full justify-center rounded-xl bg-card px-4"><Plus className="size-4" /> Recommend a place</Button></DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="font-display text-3xl">Recommend a place</DialogTitle>
