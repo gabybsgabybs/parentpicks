@@ -1,6 +1,6 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
-import { supabaseForUser } from "../supabase";
+import { supabaseAnon } from "../supabase";
 import { PROVIDER_FIELDS, MIN_PARENTS, toProviderJson, fail, DISCLAIMER } from "../shared";
 
 export default defineTool({
@@ -9,8 +9,8 @@ export default defineTool({
   description: "Get one place's details, contact info and anonymous parent comments by its id.",
   inputSchema: { id: z.string().uuid().describe("Place id from search_recommendations.") },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-  handler: async ({ id }, ctx) => {
-    const db = supabaseForUser(ctx);
+  handler: async ({ id }) => {
+    const db = supabaseAnon();
     const { data: p, error } = await db.from("providers").select(PROVIDER_FIELDS)
       .eq("id", id).eq("status", "published").gte("parent_count", MIN_PARENTS).maybeSingle();
     if (error) fail(error.message);

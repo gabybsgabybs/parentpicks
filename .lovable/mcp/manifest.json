@@ -3,11 +3,7 @@
   "sdk_version": "3.4.0",
   "path": "/mcp",
   "auth": {
-    "type": "oauth",
-    "issuer": "https://jjswwevwsiygkuelhzmh.supabase.co/auth/v1",
-    "accepted_audiences": [
-      "authenticated"
-    ]
+    "type": "none"
   },
   "mcp": {
     "server": {
@@ -19,7 +15,7 @@
       {
         "name": "search_recommendations",
         "title": "Search recommendations",
-        "description": "Search parent-recommended places in your neighborhoods by keyword and/or category, ranked by how many parents recommend them.",
+        "description": "Search parent-recommended places in San Francisco by keyword and/or category, ranked by how many parents recommend them.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
