@@ -17,6 +17,7 @@ import type { Provider } from "@/lib/board";
 import { lookupContacts, mergeProviders, splitProvider } from "@/lib/pipeline.functions";
 import { websiteOnly } from "@/lib/categories";
 import { AdminReviews } from "@/components/AdminReviews";
+import { PendingSuggestions } from "@/components/PendingSuggestions";
 
 const reviewQuery = (nb: string) => queryOptions({
   queryKey: ["review", nb],
@@ -69,6 +70,8 @@ function Review() {
   return (
     <div className="space-y-8">
       <h1 className="font-display text-4xl font-extrabold">Admin central</h1>
+
+      <PendingSuggestions neighborhoodId={group.neighborhoodId} />
 
       {data.flags.length > 0 && (
         <section>

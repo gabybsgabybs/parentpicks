@@ -8,6 +8,7 @@ import { askVillage } from "@/lib/village-chat.functions";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import iOutings from "@/assets/icon-outings.png";
+import { McpConnect } from "@/components/McpConnect";
 
 type Msg = { id: string; role: "user" | "assistant"; content: string; places: { id: string; name: string }[] };
 
@@ -67,6 +68,7 @@ export function VillageChat() {
             {saved.length > 0 && <Button variant="ghost" size="icon" onClick={clear} aria-label="Clear conversation"><Trash2 className="size-4" /></Button>}
             <Button variant="ghost" size="icon" onClick={() => setOpen(false)} aria-label="Close chat"><X className="size-4" /></Button>
           </div>
+          <McpConnect />
 
           <div className="-mx-1 mt-4 flex-1 space-y-4 overflow-y-auto px-1">
             {saved.length === 0 && !pending && (
