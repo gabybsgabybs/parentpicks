@@ -10,6 +10,7 @@ import { ProviderCard } from "@/components/ProviderCard";
 import { SplitBar } from "@/components/SplitBar";
 import { TipJar } from "@/components/TipJar";
 import { VillageChat } from "@/components/VillageChat";
+import { RecommendPlace } from "@/components/RecommendPlace";
 import { Input } from "@/components/ui/input";
 import iHealth from "@/assets/icon-health.png";
 import iChildcare from "@/assets/icon-childcare.png";
@@ -50,9 +51,12 @@ function Board() {
         <div className="py-2">
           <h1 className="font-display text-[32px] leading-tight md:text-[56px]">What the village recommends</h1>
           <p className="mt-2 text-sm text-muted-foreground">Curated from WhatsApp local parents groups · summaries by AI</p>
-          <div className="relative mt-4">
+          <div className="mt-4 flex flex-col items-start gap-2">
+          <div className="relative w-full">
             <Search className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
             <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search pediatricians, swim lessons, nannies…" className="h-14 rounded-xl bg-popover pl-12 text-base md:text-lg" aria-label="Search recommendations" />
+          </div>
+          <RecommendPlace />
           </div>
         </div>
         <img src={village} alt="" width={1600} height={1008} className="village-fade-left hidden max-h-[40vh] w-full object-cover object-center mix-blend-multiply sm:block" />

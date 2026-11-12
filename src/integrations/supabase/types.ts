@@ -332,6 +332,60 @@ export type Database = {
         }
         Relationships: []
       }
+      parent_suggestions: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          name: string
+          neighborhood_id: string
+          provider_id: string | null
+          review: string
+          sentiment: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          id?: string
+          name: string
+          neighborhood_id: string
+          provider_id?: string | null
+          review: string
+          sentiment?: string
+          status?: string
+          user_id?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          name?: string
+          neighborhood_id?: string
+          provider_id?: string | null
+          review?: string
+          sentiment?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parent_suggestions_neighborhood_id_fkey"
+            columns: ["neighborhood_id"]
+            isOneToOne: false
+            referencedRelation: "neighborhoods"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "parent_suggestions_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       providers: {
         Row: {
           address: string | null
@@ -501,6 +555,10 @@ export type Database = {
           _sentiment?: string
         }
         Returns: undefined
+      }
+      admin_resolve_suggestion: {
+        Args: { _action: string; _id: string }
+        Returns: string
       }
       is_admin: { Args: { _nb: string }; Returns: boolean }
       is_member: { Args: { _nb: string }; Returns: boolean }
