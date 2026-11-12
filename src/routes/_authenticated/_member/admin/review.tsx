@@ -18,6 +18,7 @@ import { lookupContacts, mergeProviders, splitProvider } from "@/lib/pipeline.fu
 import { websiteOnly } from "@/lib/categories";
 import { AdminReviews } from "@/components/AdminReviews";
 import { PendingSuggestions } from "@/components/PendingSuggestions";
+import { ValidateReviews } from "@/components/ValidateReviews";
 
 const reviewQuery = (nb: string) => queryOptions({
   queryKey: ["review", nb],
@@ -72,6 +73,7 @@ function Review() {
       <h1 className="font-display text-4xl font-extrabold">Admin central</h1>
 
       <PendingSuggestions neighborhoodId={group.neighborhoodId} />
+      <ValidateReviews neighborhoodId={group.neighborhoodId} />
 
       {data.flags.length > 0 && (
         <section>
