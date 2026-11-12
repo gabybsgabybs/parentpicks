@@ -27,7 +27,6 @@ export function AppHeader() {
         </Link>
         <nav className="hidden items-center gap-1 sm:flex">
           <Link to="/board" className={link} onClick={() => setOpen(false)}>Board</Link>
-          <Link to="/ask" className={link} onClick={() => setOpen(false)}>Ask the Village</Link>
           {group.role === "admin" && <>
             <Link to="/admin/upload" className={link} onClick={() => setOpen(false)}>Upload</Link>
             <Link to="/admin/review" className={link} onClick={() => setOpen(false)}>Admin central</Link>
@@ -43,7 +42,6 @@ export function AppHeader() {
             <SheetTitle className="font-display text-2xl">Menu</SheetTitle>
             <nav className="mt-6 flex flex-col items-start gap-2">
               <Link to="/board" className={link} onClick={() => setOpen(false)}>Board</Link>
-          <Link to="/ask" className={link} onClick={() => setOpen(false)}>Ask the Village</Link>
           {group.role === "admin" && <>
             <Link to="/admin/upload" className={link} onClick={() => setOpen(false)}>Upload</Link>
             <Link to="/admin/review" className={link} onClick={() => setOpen(false)}>Admin central</Link>
