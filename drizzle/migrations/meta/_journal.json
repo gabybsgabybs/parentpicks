@@ -127,6 +127,13 @@
       "when": 1794517503604,
       "tag": "0017_review_sentiment_check",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1794517959214,
+      "tag": "0018_more_categories",
+      "breakpoints": true
     }
   ]
 }
