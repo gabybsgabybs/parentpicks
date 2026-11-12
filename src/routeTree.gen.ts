@@ -17,6 +17,7 @@ import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } fr
 import { Route as AuthenticatedMemberRouteRouteImport } from './routes/_authenticated/_member/route'
 import { Route as AuthenticatedJoinRouteImport } from './routes/_authenticated/join'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
+import { Route as AuthenticatedMemberAskRouteImport } from './routes/_authenticated/_member/ask'
 import { Route as AuthenticatedMemberBoardRouteImport } from './routes/_authenticated/_member/board'
 import { Route as AuthenticatedMemberAdminMembersRouteImport } from './routes/_authenticated/_member/admin/members'
 import { Route as AuthenticatedMemberAdminReviewRouteImport } from './routes/_authenticated/_member/admin/review'
@@ -64,6 +65,11 @@ const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
   path: '/.lovable/oauth/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedMemberAskRoute = AuthenticatedMemberAskRouteImport.update({
+  id: '/ask',
+  path: '/ask',
+  getParentRoute: () => AuthenticatedMemberRouteRoute,
+} as any)
 const AuthenticatedMemberBoardRoute =
   AuthenticatedMemberBoardRouteImport.update({
     id: '/board',
@@ -107,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/join': typeof AuthenticatedJoinRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/ask': typeof AuthenticatedMemberAskRoute
   '/board': typeof AuthenticatedMemberBoardRoute
   '/admin/members': typeof AuthenticatedMemberAdminMembersRoute
   '/admin/review': typeof AuthenticatedMemberAdminReviewRoute
@@ -121,6 +128,7 @@ export interface FileRoutesByTo {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/join': typeof AuthenticatedJoinRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/ask': typeof AuthenticatedMemberAskRoute
   '/board': typeof AuthenticatedMemberBoardRoute
   '/admin/members': typeof AuthenticatedMemberAdminMembersRoute
   '/admin/review': typeof AuthenticatedMemberAdminReviewRoute
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/join': typeof AuthenticatedJoinRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/_authenticated/_member/ask': typeof AuthenticatedMemberAskRoute
   '/_authenticated/_member/board': typeof AuthenticatedMemberBoardRoute
   '/_authenticated/_member/admin/members': typeof AuthenticatedMemberAdminMembersRoute
   '/_authenticated/_member/admin/review': typeof AuthenticatedMemberAdminReviewRoute
@@ -154,6 +163,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/join'
     | '/.lovable/oauth/consent'
+    | '/ask'
     | '/board'
     | '/admin/members'
     | '/admin/review'
@@ -168,6 +178,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/join'
     | '/.lovable/oauth/consent'
+    | '/ask'
     | '/board'
     | '/admin/members'
     | '/admin/review'
@@ -184,6 +195,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/_authenticated/join'
     | '/.lovable/oauth/consent'
+    | '/_authenticated/_member/ask'
     | '/_authenticated/_member/board'
     | '/_authenticated/_member/admin/members'
     | '/_authenticated/_member/admin/review'
@@ -259,6 +271,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DotlovableOauthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/_member/ask': {
+      id: '/_authenticated/_member/ask'
+      path: '/ask'
+      fullPath: '/ask'
+      preLoaderRoute: typeof AuthenticatedMemberAskRouteImport
+      parentRoute: typeof AuthenticatedMemberRouteRoute
+    }
     '/_authenticated/_member/board': {
       id: '/_authenticated/_member/board'
       path: '/board'
@@ -305,6 +324,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedMemberRouteRouteChildren {
+  AuthenticatedMemberAskRoute: typeof AuthenticatedMemberAskRoute
   AuthenticatedMemberBoardRoute: typeof AuthenticatedMemberBoardRoute
   AuthenticatedMemberAdminMembersRoute: typeof AuthenticatedMemberAdminMembersRoute
   AuthenticatedMemberAdminReviewRoute: typeof AuthenticatedMemberAdminReviewRoute
@@ -315,6 +335,7 @@ interface AuthenticatedMemberRouteRouteChildren {
 
 const AuthenticatedMemberRouteRouteChildren: AuthenticatedMemberRouteRouteChildren =
   {
+    AuthenticatedMemberAskRoute: AuthenticatedMemberAskRoute,
     AuthenticatedMemberBoardRoute: AuthenticatedMemberBoardRoute,
     AuthenticatedMemberAdminMembersRoute: AuthenticatedMemberAdminMembersRoute,
     AuthenticatedMemberAdminReviewRoute: AuthenticatedMemberAdminReviewRoute,
