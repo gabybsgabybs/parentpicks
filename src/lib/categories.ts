@@ -87,6 +87,7 @@ export const WEBSITE_ONLY_CATEGORIES = [
   "clothing brands", "toys", "stores",
   "shoes and clothes", "strollers and car seats", "feeding and home gear",
   "travel with kids", "toddler tower and furniture", "utilities, cars and money", "toys and books",
+  "skincare and beauty", "baby and family health products", "name labels", "apps and online tools", "parenting books and communities", "jewelry and keepsakes",
 ] as const;
 export function websiteOnly(category: string) {
   return (WEBSITE_ONLY_CATEGORIES as readonly string[]).includes(category);
