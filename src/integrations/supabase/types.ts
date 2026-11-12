@@ -456,6 +456,36 @@ export type Database = {
           },
         ]
       }
+      village_chat: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          neighborhood_id: string
+          place_ids: string[]
+          role: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          neighborhood_id: string
+          place_ids?: string[]
+          role: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          neighborhood_id?: string
+          place_ids?: string[]
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
