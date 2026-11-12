@@ -504,6 +504,7 @@ export type Database = {
       }
       is_admin: { Args: { _nb: string }; Returns: boolean }
       is_member: { Args: { _nb: string }; Returns: boolean }
+      join_default: { Args: never; Returns: string }
       join_with_code: { Args: { _code: string }; Returns: string }
       recompute_provider: { Args: { _p: string }; Returns: undefined }
       rotate_invite_code: { Args: { _nb: string }; Returns: string }
