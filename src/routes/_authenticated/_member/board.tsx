@@ -9,6 +9,7 @@ import { CATEGORY_LABEL, type Category } from "@/lib/categories";
 import { ProviderCard } from "@/components/ProviderCard";
 import { SplitBar } from "@/components/SplitBar";
 import { TipJar } from "@/components/TipJar";
+import { VillageChat } from "@/components/VillageChat";
 import { Input } from "@/components/ui/input";
 import iHealth from "@/assets/icon-health.png";
 import iChildcare from "@/assets/icon-childcare.png";
@@ -104,6 +105,7 @@ function Board() {
       <p className="mt-10 text-xs text-muted-foreground">Recommendations as shared by parents in the group. Summaries are written by AI and may contain mistakes. Not verified.</p>
 
       <TipJar thanks={tip === "thanks"} />
+      <VillageChat />
     </div>
   );
 }
