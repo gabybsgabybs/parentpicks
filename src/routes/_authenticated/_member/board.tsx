@@ -74,7 +74,7 @@ function Board() {
           {groups.length > 1 && (
             <nav aria-label="Jump to section" className="sticky top-[61px] z-10 -mx-4 mt-6 flex gap-2 overflow-x-auto bg-background/90 px-4 py-2 backdrop-blur [scrollbar-width:none]">
               {groups.map((g) => (
-                <a key={g.name} href={`#sec-${g.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`} className="shrink-0 rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium hover:bg-secondary">{g.name}</a>
+                <a key={g.name} href={`#sec-${g.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`} className="shrink-0 rounded-full border border-marigold/70 bg-marigold/35 px-3 py-1.5 text-sm font-medium text-foreground transition hover:bg-marigold/60">{g.name}</a>
               ))}
             </nav>
           )}

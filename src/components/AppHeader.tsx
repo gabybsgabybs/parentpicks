@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { useState } from "react";
+import mascot from "@/assets/mascot-parent-child.png";
 
 export function AppHeader() {
   const { group } = useRouteContext({ from: "/_authenticated/_member" });
@@ -22,8 +23,8 @@ export function AppHeader() {
     <header className="border-b border-border bg-background/90 backdrop-blur sticky top-0 z-20">
       <div className="mx-auto flex max-w-5xl items-center gap-2 px-4 py-3">
         <Link to="/board" className="mr-auto flex min-w-0 items-center gap-2">
-          <span className="grid size-8 place-items-center shrink-0 rounded-lg bg-marigold font-display text-lg font-extrabold">P</span>
-          <span className="min-w-0 truncate font-display text-lg font-extrabold leading-none">{group.name}<span className="block text-xs font-medium text-muted-foreground font-sans">Parent Picks</span></span>
+          <img src={mascot} alt="" width={655} height={917} className="h-11 w-auto shrink-0 object-contain" />
+          <span className="min-w-0 truncate font-display text-xl font-extrabold leading-none">Parent Picks</span>
         </Link>
         <nav className="hidden items-center gap-1 sm:flex">
           <Link to="/board" className={link} onClick={() => setOpen(false)}>Board</Link>
