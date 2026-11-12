@@ -255,6 +255,7 @@ export type Database = {
           self_promo: boolean
           sender_hash: string
           sentiment: string
+          sentiment_checked: boolean
           upload_id: string | null
         }
         Insert: {
@@ -270,6 +271,7 @@ export type Database = {
           self_promo?: boolean
           sender_hash: string
           sentiment: string
+          sentiment_checked?: boolean
           upload_id?: string | null
         }
         Update: {
@@ -285,6 +287,7 @@ export type Database = {
           self_promo?: boolean
           sender_hash?: string
           sentiment?: string
+          sentiment_checked?: boolean
           upload_id?: string | null
         }
         Relationships: [
@@ -545,6 +548,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_check_review: {
+        Args: { _mention: string; _neighborhood: string; _sentiment: string }
+        Returns: undefined
+      }
       admin_manage_review: {
         Args: {
           _action: string
