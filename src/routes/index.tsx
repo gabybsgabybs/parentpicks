@@ -1,3 +1,4 @@
+import mascot from "@/assets/mascot-parent-child.png";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import village from "@/assets/village-meadow.jpg";
@@ -46,7 +47,7 @@ function Index() {
   return (
     <div className="min-h-screen">
       <div className="mx-auto max-w-6xl px-4 py-6 flex items-center">
-        <span className="grid size-9 place-items-center rounded-lg bg-marigold font-display text-xl font-extrabold">P</span>
+        <img src={mascot} alt="" width={655} height={917} className="h-11 w-auto shrink-0 object-contain" />
         <span className="ml-2 font-display text-xl font-extrabold">Parent Picks</span>
         <Button asChild variant="ghost" className="ml-auto"><Link to="/auth">Sign in</Link></Button>
       </div>
