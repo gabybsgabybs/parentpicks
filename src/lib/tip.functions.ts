@@ -11,6 +11,8 @@ type TipCheckoutResult = { clientSecret: string } | { error: string };
 
 export const MIN_TIP_CENTS = 100;
 export const MAX_TIP_CENTS = 50000;
+// The only tip amounts the server will charge.
+export const TIP_AMOUNTS_CENTS = [200, 500, 1000] as const;
 
 // Look up an existing Customer by userId metadata (then by email), or create
 // one. Putting userId on the Customer object is what makes later reads
@@ -65,11 +67,9 @@ export const createTipCheckout = createServerFn({ method: "POST" })
     environment: StripeEnv;
   }) => {
     if (
-      !Number.isInteger(data.amountInCents) ||
-      data.amountInCents < MIN_TIP_CENTS ||
-      data.amountInCents > MAX_TIP_CENTS
+      !(TIP_AMOUNTS_CENTS as readonly number[]).includes(data.amountInCents)
     ) {
-      throw new Error("Choose a tip between $1 and $500");
+      throw new Error("Choose a tip of $2, $5 or $10");
     }
     if (typeof data.returnUrl !== "string" || !data.returnUrl.startsWith("http")) {
       throw new Error("Invalid return address");

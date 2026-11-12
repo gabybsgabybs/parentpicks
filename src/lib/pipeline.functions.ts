@@ -10,6 +10,14 @@ async function assertAdmin(supabase: any, nb: string) {
   if (!data) throw new Error("Only group admins can do this");
 }
 
+// Confirms the upload belongs to the (already admin-checked) neighborhood and is still processing.
+async function assertUploadInNeighborhood(uploadId: string, nb: string) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await supabaseAdmin.from("uploads").select("id")
+    .eq("id", uploadId).eq("neighborhood_id", nb).maybeSingle();
+  if (!data) throw new Error("Upload not found");
+}
+
 export const startUpload = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: { neighborhoodId: string; consent: boolean; messagesRead: number }) =>
@@ -34,6 +42,7 @@ export const processChunk = createServerFn({ method: "POST" })
   }).parse(d))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, data.neighborhoodId);
+    await assertUploadInNeighborhood(data.uploadId, data.neighborhoodId);
     const { aiJson, hashSender } = await import("./ai.server");
     // Sender names are replaced by stable aliases (P1, P2...) before AI sees them.
     const alias = new Map<string, string>();
@@ -83,14 +92,15 @@ export const finalizeUpload = createServerFn({ method: "POST" })
     z.object({ neighborhoodId: z.string().uuid(), uploadId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, data.neighborhoodId);
+    await assertUploadInNeighborhood(data.uploadId, data.neighborhoodId);
     const { aiJson } = await import("./ai.server");
     const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
     const nb = data.neighborhoodId;
-    const { data: pending } = await db.from("mentions").select("id, raw_name, category, location, paraphrase").eq("upload_id", data.uploadId).is("provider_id", null);
+    const { data: pending } = await db.from("mentions").select("id, raw_name, category, location, paraphrase").eq("upload_id", data.uploadId).eq("neighborhood_id", nb).is("provider_id", null);
     const { data: existing } = await db.from("providers").select("id, name, aliases, category").eq("neighborhood_id", nb);
     const names = [...new Set((pending ?? []).map((m) => m.raw_name))];
     if (!names.length) {
-      await db.from("uploads").update({ status: "done", recommendations_found: 0 }).eq("id", data.uploadId);
+      await db.from("uploads").update({ status: "done", recommendations_found: 0 }).eq("id", data.uploadId).eq("neighborhood_id", nb);
       return { recommendations: 0, mentions: 0, providerIds: [] as string[] };
     }
     const nameInfo = names.map((n) => {
@@ -141,7 +151,7 @@ uncertain_with: if a group MIGHT be the same as another group's canonical_name o
     for (const id of touched) await db.rpc("recompute_provider", { _p: id });
     await writeSummaries(db, [...touched]);
     const { count } = await db.from("mentions").select("id", { count: "exact", head: true }).eq("upload_id", data.uploadId);
-    await db.from("uploads").update({ status: "done", recommendations_found: touched.size }).eq("id", data.uploadId);
+    await db.from("uploads").update({ status: "done", recommendations_found: touched.size }).eq("id", data.uploadId).eq("neighborhood_id", nb);
     return { recommendations: touched.size, mentions: count ?? 0, providerIds: [...touched] };
   });
 

@@ -2,20 +2,11 @@ import { useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import { Heart } from "lucide-react";
-import { createTipCheckout, MAX_TIP_CENTS, MIN_TIP_CENTS } from "@/lib/tip.functions";
+import { createTipCheckout, TIP_AMOUNTS_CENTS } from "@/lib/tip.functions";
 import { getStripe, safeStripeEnvironment } from "@/lib/stripe";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
-const CHIPS = [200, 500, 1000];
-
-function toCents(raw: string): number | null {
-  const cleaned = raw.replace(/[^0-9.]/g, "");
-  if (!cleaned) return null;
-  const value = Number(cleaned);
-  if (!Number.isFinite(value) || value <= 0) return null;
-  return Math.round(value * 100);
-}
+const CHIPS = TIP_AMOUNTS_CENTS;
 
 function dollars(cents: number): string {
   return (cents / 100).toLocaleString("en-US", {
@@ -27,13 +18,12 @@ function dollars(cents: number): string {
 
 export function TipJar({ thanks = false }: { thanks?: boolean }) {
   const environment = safeStripeEnvironment();
-  const [picked, setPicked] = useState<number | "custom">(500);
-  const [customInput, setCustomInput] = useState("");
+  const [picked, setPicked] = useState<number>(500);
   const [sessionCents, setSessionCents] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const openTipCheckout = useServerFn(createTipCheckout);
 
-  const cents = picked === "custom" ? toCents(customInput) : picked;
+  const cents: number | null = picked;
 
   const checkoutOptions = useMemo(() => {
     if (sessionCents === null || environment === null) return null;
@@ -118,25 +108,6 @@ export function TipJar({ thanks = false }: { thanks?: boolean }) {
                 {dollars(chip)}
               </button>
             ))}
-            <div className="relative w-28">
-              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-muted-foreground">
-                $
-              </span>
-              <Input
-                value={customInput}
-                onChange={(e) => {
-                  setPicked("custom");
-                  setCustomInput(e.target.value);
-                  setError(null);
-                }}
-                inputMode="decimal"
-                placeholder="other"
-                aria-label="Other tip amount in dollars"
-                className={`h-9 rounded-full pl-7 text-sm ${
-                  picked === "custom" ? "border-primary" : ""
-                }`}
-              />
-            </div>
           </div>
 
           {error && <p className="mt-3 text-sm font-medium text-destructive">{error}</p>}
@@ -161,7 +132,7 @@ export function TipJar({ thanks = false }: { thanks?: boolean }) {
             <Button
               size="lg"
               className="mt-5 rounded-full px-7"
-              disabled={cents === null || cents < MIN_TIP_CENTS || cents > MAX_TIP_CENTS}
+              disabled={cents === null}
               onClick={() => {
                 if (cents === null) return;
                 setError(null);
