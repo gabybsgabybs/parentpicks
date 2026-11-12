@@ -50,7 +50,7 @@ export const askVillage = createServerFn({ method: "POST" })
     );
     const placeIds = out.place_ids.filter((id) => ids.includes(id));
     const { error } = await db.from("village_chat").insert([
-      { user_id: context.userId, neighborhood_id: data.neighborhoodId, role: "user", content: data.question },
+      { user_id: context.userId, neighborhood_id: data.neighborhoodId, role: "user", content: data.question, place_ids: [] },
       { user_id: context.userId, neighborhood_id: data.neighborhoodId, role: "assistant", content: out.answer, place_ids: placeIds },
     ]);
     if (error) throw new Error(error.message);
