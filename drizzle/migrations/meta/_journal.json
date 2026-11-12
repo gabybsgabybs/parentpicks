@@ -106,6 +106,13 @@
       "when": 1794515631824,
       "tag": "0014_public_mcp_and_open_join",
       "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1794515662932,
+      "tag": "0015_fix_join_default",
+      "breakpoints": true
     }
   ]
 }
