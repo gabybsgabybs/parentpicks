@@ -2,13 +2,13 @@
 type Item = { id: string; name: string; category: string; positive: number; negative: number; parent_count: number };
 
 export const CATEGORY_GROUPS: { name: string; categories: string[] }[] = [
-  { name: "Health", categories: ["pediatrician", "pediatricians", "dentist", "pediatric dentists", "adult dentists", "specialist", "tongue tie and ENT", "therapist", "massage, PT and therapy", "feeding, sleep and doulas", "doctors and specialists", "mental health"] },
-  { name: "Childcare", categories: ["childcare", "preschools and daycares", "nannies and sitters", "childcare agencies and tips", "elementary and K-12 schools"] },
+  { name: "Health", categories: ["pediatrician", "pediatricians", "dentist", "pediatric dentists", "adult dentists", "specialist", "tongue tie and ENT", "therapist", "massage, PT and therapy", "feeding, sleep and doulas", "doctors and specialists", "mental health", "skincare and beauty", "baby and family health products", "glasses and eyewear", "pharmacy and vaccines"] },
+  { name: "Childcare", categories: ["childcare", "preschools and daycares", "nannies and sitters", "childcare agencies and tips", "elementary and K-12 schools", "parenting books and communities"] },
   { name: "Activities", categories: ["classes and activities", "camps", "swim", "free and drop-in", "birthday party venues", "birthday party venues and entertainers"] },
-  { name: "Gear", categories: ["clothing brands", "toys", "shoes and clothes", "strollers and car seats", "feeding and home gear", "toddler tower and furniture", "stores", "toys and books"] },
-  { name: "Home & services", categories: ["services", "cleaners, handy people and gardeners", "utilities, cars and money", "real estate and tenants", "haircuts and styling", "photographers", "pets", "home services and contractors"] },
+  { name: "Gear", categories: ["clothing brands", "toys", "shoes and clothes", "strollers and car seats", "feeding and home gear", "toddler tower and furniture", "stores", "toys and books", "name labels", "jewelry and keepsakes"] },
+  { name: "Home & services", categories: ["services", "cleaners, handy people and gardeners", "utilities, cars and money", "real estate and tenants", "haircuts and styling", "photographers", "pets", "home services and contractors", "apps and online tools", "legal help", "senior care"] },
   { name: "Food", categories: ["kid-friendly restaurants", "dinner delivery and takeout", "kid-friendly restaurants and cafes"] },
-  { name: "Out & about", categories: ["travel with kids", "travel and outings", "local businesses", "other"] },
+  { name: "Out & about", categories: ["travel with kids", "travel and outings", "local businesses", "other", "passport photos and prints", "giving and volunteering"] },
 ];
 
 export const score = (p: { positive: number; negative: number }) => p.positive - p.negative;

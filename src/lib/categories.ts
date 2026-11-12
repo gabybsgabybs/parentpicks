@@ -13,6 +13,18 @@ export const CATEGORIES = [
   "kid-friendly restaurants and cafes", "toys and books", "doctors and specialists",
   "birthday party venues and entertainers", "elementary and K-12 schools", "mental health",
   "home services and contractors",
+  "passport photos and prints",
+  "skincare and beauty",
+  "baby and family health products",
+  "name labels",
+  "apps and online tools",
+  "parenting books and communities",
+  "legal help",
+  "giving and volunteering",
+  "glasses and eyewear",
+  "senior care",
+  "jewelry and keepsakes",
+  "pharmacy and vaccines",
 ] as const;
 export type Category = (typeof CATEGORIES)[number];
 export const CATEGORY_LABEL: Record<Category, string> = {
@@ -36,6 +48,18 @@ export const CATEGORY_LABEL: Record<Category, string> = {
   "doctors and specialists": "Doctors & specialists", "birthday party venues and entertainers": "Birthday venues & entertainers",
   "elementary and K-12 schools": "Elementary & K-12 schools", "mental health": "Mental health",
   "home services and contractors": "Home services & contractors",
+  "passport photos and prints": "Passport photos & prints",
+  "skincare and beauty": "Skincare & beauty",
+  "baby and family health products": "Baby & family health products",
+  "name labels": "Name labels",
+  "apps and online tools": "Apps & online tools",
+  "parenting books and communities": "Parenting books & communities",
+  "legal help": "Legal help",
+  "giving and volunteering": "Giving & volunteering",
+  "glasses and eyewear": "Glasses & eyewear",
+  "senior care": "Senior care",
+  "jewelry and keepsakes": "Jewelry & keepsakes",
+  "pharmacy and vaccines": "Pharmacy & vaccines",
 };
 export const MIN_PARENTS = 2;
 export const OLD_AFTER_YEARS = 2;
