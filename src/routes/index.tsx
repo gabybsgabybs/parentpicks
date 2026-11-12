@@ -22,7 +22,7 @@ const sampleReviews = [
 ];
 
 const faqs = [
-  { question: "Who can see our group's recommendations?", answer: "Your group's board is for signed-in members who have joined with its invite code. The public examples on this page are illustrative, not excerpts from a private chat." },
+  { question: "Who can see our group's recommendations?", answer: "The board is for signed-in parents. The public examples on this page are illustrative, not excerpts from a private chat." },
   { question: "Are the reviews anonymized?", answer: "Yes. Every review is anonymized: no parent names, initials or phone numbers are shown, and each note is simply attributed to ‘A parent’. Notes are paraphrased, not quoted, and children's names, ages and health details are left out." },
   { question: "Are these independent parent reviews?", answer: "Recommendations come from conversations shared by parents, not reviews written by Parent Picks or endorsements by the businesses. Suspected self-promotion can be flagged for admin review. Positive, mixed and negative experiences can all appear; being listed is not a guarantee of quality." },
   { question: "Are the reviews and contact details verified?", answer: "Recommendations as shared by parents in the group. Summaries are written by AI and may contain mistakes. Not verified. Contact details found online can also be out of date or match the wrong business, so please double-check before booking." },

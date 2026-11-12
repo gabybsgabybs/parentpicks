@@ -19,3 +19,10 @@ export function supabaseForUser(ctx: ToolContext) {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 }
+
+export function supabaseAnon() {
+  const url = env(["SUPABASE_URL", "VITE_SUPABASE_URL"]);
+  const key = env(["SUPABASE_PUBLISHABLE_KEY", "VITE_SUPABASE_PUBLISHABLE_KEY", "SUPABASE_ANON_KEY"]);
+  if (!url || !key) throw new Error("Backend is not configured");
+  return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+}

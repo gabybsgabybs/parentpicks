@@ -1,5 +1,5 @@
 import { defineTool } from "@lovable.dev/mcp-js";
-import { supabaseForUser } from "../supabase";
+import { supabaseAnon } from "../supabase";
 import { MIN_PARENTS, fail } from "../shared";
 import { CATEGORY_LABEL } from "@/lib/categories";
 
@@ -9,8 +9,8 @@ export default defineTool({
   description: "List recommendation categories with how many places each has.",
   inputSchema: {},
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-  handler: async (_a, ctx) => {
-    const db = supabaseForUser(ctx);
+  handler: async () => {
+    const db = supabaseAnon();
     const { data, error } = await db.from("providers").select("category").eq("status", "published").gte("parent_count", MIN_PARENTS).limit(2000);
     if (error) fail(error.message);
     const counts = new Map<string, number>();
