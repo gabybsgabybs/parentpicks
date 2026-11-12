@@ -51,8 +51,8 @@ function Board() {
         <div className="py-2">
           <h1 className="font-display text-[32px] leading-tight md:text-[56px]">What the village recommends</h1>
           <p className="mt-2 text-sm text-muted-foreground">Curated from WhatsApp local parents groups · summaries by AI</p>
-          <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-          <div className="relative flex-1">
+          <div className="mt-4 flex flex-col items-start gap-2">
+          <div className="relative w-full">
             <Search className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
             <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search pediatricians, swim lessons, nannies…" className="h-14 rounded-xl bg-popover pl-12 text-base md:text-lg" aria-label="Search recommendations" />
           </div>
