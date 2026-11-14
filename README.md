@@ -6,7 +6,7 @@ This project was built with [Lovable](https://lovable.dev).
 
 **Live app**: https://parentpicks.lovable.app
 
-## Build with Lovable
+## Build with Lovable and coffee
 
 Continue developing this project in the [Lovable editor](https://lovable.dev/projects/e153f085-acd8-4fcf-9cbb-7ea85253116d).
 
